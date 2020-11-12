@@ -1,0 +1,7 @@
+{
+  "name": "mobileResto",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}
