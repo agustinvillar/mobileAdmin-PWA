@@ -1,0 +1,30 @@
+<ion-content>
+  <ion-grid>
+    <ion-row class="img-row">
+      <ion-col class="ion-text-center">
+        <img src="assets/img/menoo-logo.png" alt="menoo"/>
+      </ion-col>
+    </ion-row>
+    
+    <ion-row class="form-row">
+      <ion-col>
+        <form >
+          <div class="input-group">
+            <ion-item>
+              <ion-input type="email" placeholder="email"></ion-input>
+            </ion-item>
+            <ion-item>
+              <ion-input type="contraseña" placeholder="contraseña"></ion-input>
+            </ion-item>
+          </div>
+       
+          <div class="ion-padding-top">
+            <ion-button type="submit" expand="block" (click)="login()">
+              ingresar
+            </ion-button>
+          </div>
+        </form>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
