@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
+import { SwalService } from '../services/swal/swal.service';
 
 @Component({
   selector: 'app-scanQR',
@@ -8,7 +9,7 @@ import { QRScanner, QRScannerStatus } from '@ionic-native/qr-scanner/ngx';
 })
 export class ScanQRPage {
 
-  constructor(private qrScanner: QRScanner) {}
+  constructor(private qrScanner: QRScanner, private swalService: SwalService) {}
   
   ionViewWillEnter() {
     this.scan();
@@ -23,7 +24,7 @@ export class ScanQRPage {
         // start scanning
         let scanSub = this.qrScanner.scan().subscribe((text: string) => {
           scanSub.unsubscribe(); // stop scanning
-          console.log('SCAN OK', text) 
+          this.swalService.showGeneric(text, 'success');   
         });        
         this.qrScanner.show();
       } else {
@@ -33,8 +34,7 @@ export class ScanQRPage {
       console.log('Error: ', JSON.stringify(e));
       e.name === 'CAMERA_ACCESS_DENIED' ? 
         this.openCameraSettings() :
-        // this.swalProvider.showInfo(ERROR_TRY_AGAIN, 'error');
-        console.log('ERROR_TRY_AGAIN')      
+        this.swalService.showGeneric("ERROR_TRY_AGAIN", 'error');      
     });
   }
   
@@ -44,8 +44,7 @@ export class ScanQRPage {
   }
 
   async openCameraSettings() {
-    // await this.swalProvider.showInfo(ERROR_ALLOW_CAMERA, 'error');
-    console.log('ERROR_ALLOW_CAMERA') 
+    await this.swalService.showGeneric("ERROR_ALLOW_CAMERA", 'error');
     this.qrScanner.openSettings();
   }
 
