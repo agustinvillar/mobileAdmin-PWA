@@ -9,11 +9,11 @@ const routes: Routes = [
     children: [
       {
         path: 'dashboard',
-        loadChildren: () => import('../dashboard/dashboard.module').then(m => m.DashboardPageModule)
+        loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardPageModule)
       },
       {
         path: 'scanQR',
-        loadChildren: () => import('../scanQR/scanQR.module').then(m => m.ScanQRPageModule)
+        loadChildren: () => import('./scanQR/scanQR.module').then(m => m.ScanQRPageModule)
       },
       {
         path: '',
