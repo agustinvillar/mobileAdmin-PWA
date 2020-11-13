@@ -16,3 +16,7 @@ ion-grid {
     align-content: flex-start;
   }
 }
+ion-toolbar {
+  --border-style: none;
+  --ion-padding: 0.4rem !important;
+}
