@@ -7,8 +7,7 @@ import Swal from 'sweetalert2'
 export class SwalService {
   readonly imgsFolder: string = 'assets/img/status';
   readonly defaultOptions = { 
-    confirmButtonColor: '#FF580A',
-    confirmButtonText: 'ok',
+    confirmButtonText: 'aceptar',
     cancelButtonText: 'cancelar',
     heightAuto: false
   };
