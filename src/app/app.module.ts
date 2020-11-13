@@ -6,6 +6,7 @@ import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 import { QRScanner } from '@ionic-native/qr-scanner/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,6 +21,7 @@ import { SwalService } from './services/swal/swal.service'
     StatusBar,
     SplashScreen,
     QRScanner,
+    InAppBrowser,
     SwalService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
