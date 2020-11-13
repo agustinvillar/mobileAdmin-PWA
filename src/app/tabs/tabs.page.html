@@ -1,13 +1,24 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>RestoFede</ion-title>
+    <ion-buttons slot="primary">
+      <ion-button color="secondary" [routerLink]="['/']" routerDirection="root">
+        <ion-icon slot="icon-only" name="log-out-outline" color="primary"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 <ion-tabs>
   <ion-tab-bar slot="bottom">
-    <ion-tab-button tab="dashboard">
-      <ion-icon name="stats-chart-outline"></ion-icon>
-      <ion-label>Dashboard</ion-label>
-    </ion-tab-button>
-
     <ion-tab-button tab="scanQR">
       <ion-icon name="qr-code-outline"></ion-icon>
       <ion-label>Leer QR</ion-label>
+    </ion-tab-button>
+
+    <ion-tab-button tab="dashboard">
+      <ion-icon name="stats-chart-outline"></ion-icon>
+      <ion-label>Dashboard</ion-label>
     </ion-tab-button>
   </ion-tab-bar>
 </ion-tabs>

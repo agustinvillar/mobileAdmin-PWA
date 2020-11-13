@@ -12,8 +12,9 @@ import { ERROR_TRY_AGAIN, ERROR_ALLOW_CAMERA } from '../../services/errors.servi
 export class ScanQRPage {
   readonly SEMI_BORDER_BOX_IMG: string = SEMI_BORDER_BOX_IMG;
   
-  constructor(private qrScanner: QRScanner, private swalService: SwalService) {}
-  
+  constructor(private qrScanner: QRScanner, private swalService: SwalService) 
+  { }
+
   ionViewWillEnter() {
     this.scan();
   }
@@ -21,24 +22,22 @@ export class ScanQRPage {
     this.stopScanning();
   }
   
-  scan() {
-    this.qrScanner.prepare().then((status: QRScannerStatus) => {
-      if (status.authorized) {
-        // start scanning
-        let scanSub = this.qrScanner.scan().subscribe((text: string) => {
-          scanSub.unsubscribe(); // stop scanning
-          this.swalService.showGeneric(text, 'success');   
-        });        
-        this.qrScanner.show();
-      } else {
-        this.openCameraSettings()
-      }
-    }).catch((e) => {
-      console.log('Error: ', JSON.stringify(e));
+  async scan() {
+    try {
+      const status: QRScannerStatus = await this.qrScanner.prepare();
+      if (!status.authorized) return this.openCameraSettings();
+
+      // start scanning
+      let scanSub = this.qrScanner.scan().subscribe((text: string) => {
+        scanSub.unsubscribe(); // stop scanning
+        this.swalService.showGeneric(text, 'success');   
+      });        
+      this.qrScanner.show();
+    } catch(e) {
       e.name === 'CAMERA_ACCESS_DENIED' ? 
         this.openCameraSettings() :
         this.swalService.showGeneric(ERROR_TRY_AGAIN, 'error');      
-    });
+    }
   }
   
   private stopScanning() {
@@ -50,5 +49,4 @@ export class ScanQRPage {
     await this.swalService.showGeneric(ERROR_ALLOW_CAMERA, 'error');
     this.qrScanner.openSettings();
   }
-
 }
