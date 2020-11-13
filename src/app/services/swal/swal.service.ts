@@ -25,14 +25,14 @@ export class SwalService {
   getInfoHtml(content: string, type: string) {
     const img = `${this.imgsFolder}/${this.getTypeImg(type)}`;
 
-    return `<div class='swal-container'>` +
-      `<ion-row class='swal-img'>` +
-      `<ion-col><img src="${img}"></ion-col>` +
-      `</ion-row>` +
-      `<ion-row class='swal-header'>` +
-      `<ion-col>${content}</ion-col>` +
-      `</ion-row>` +
-      `</div>`;
+    return `<div class='swal-container'>
+      <ion-row class='swal-img'>
+        <ion-col><img src="${img}"></ion-col>
+      </ion-row>
+      <ion-row class='swal-header'>
+        <ion-col>${content}</ion-col>
+      </ion-row>
+      </div>`;
   }
 
   getTypeImg(type: string) {
