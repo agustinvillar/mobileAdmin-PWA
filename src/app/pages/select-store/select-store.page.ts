@@ -20,9 +20,11 @@ export class SelectStorePage implements OnInit {
     private loadingService: LoadingService, public swalService: SwalService
   ) { }
 
-  ngOnInit() {
+  async ngOnInit() {
+    await this.loadingService.present();
     this.storeService.storesSubject.subscribe(stores => {
       this.stores = stores;
+      this.loadingService.dismiss();
     });
   }
 
