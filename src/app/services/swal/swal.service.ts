@@ -21,6 +21,14 @@ export class SwalService {
     });
   }
 
+  showConfirm(message: string, options?: any) {
+    return Swal.fire({ 
+      html: this.getInfoHtml(message, 'question'), 
+      showCancelButton: true,
+      ...{ ...this.defaultOptions, ...options } 
+    });
+  }
+
   getInfoHtml(content: string, type: string) {
     const img = `${this.imgsFolder}/${this.getTypeImg(type)}`;
 

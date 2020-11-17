@@ -3,7 +3,18 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  firebaseConfig: {
+    apiKey: "AIzaSyCr5efpQ1cIpJmFw1Yjx6j2Wrm61q85h-M",
+    authDomain: "menootest-9fa5a.firebaseapp.com",
+    databaseURL: "https://menootest-9fa5a.firebaseio.com",
+    projectId: "menootest-9fa5a",
+    storageBucket: "menootest-9fa5a.appspot.com",
+    messagingSenderId: "152369353977",
+    appId: "1:152369353977:web:713eecbc2f9db9786d3e28",
+  },
+  API_URL: 'https://testing.menooservices.com/',
+  MERCADOPAGO_PUBLICKEY: 'TEST-70478729-a1d9-4f6f-9611-428397399b6d'
 };
 
 /*

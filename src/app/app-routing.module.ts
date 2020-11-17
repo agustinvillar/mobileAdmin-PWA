@@ -11,6 +11,10 @@ const routes: Routes = [
     loadChildren: () => import('./tabs/tabs.module').then(m => m.TabsPageModule)
   },
   {
+    path: 'select-store',
+    loadChildren: () => import('./pages/select-store/select-store.module').then( m => m.SelectStorePageModule)
+  },
+  {
     path: '',
     redirectTo: 'login',
     pathMatch: 'full'

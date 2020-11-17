@@ -1,8 +1,11 @@
 <ion-header>
   <ion-toolbar>
-    <ion-title>RestoFede</ion-title>
+    <ion-title>{{ store.name }}</ion-title>
     <ion-buttons slot="primary">
-      <ion-button color="secondary" [routerLink]="['/']" routerDirection="root">
+      <ion-button *ngIf="user.isSuperUser" color="secondary" [routerLink]="['/select-store']" routerDirection="root">
+        <ion-icon slot="icon-only" name="swap-horizontal-outline" color="primary"></ion-icon>
+      </ion-button>
+      <ion-button color="secondary" (click)="logout()">
         <ion-icon slot="icon-only" name="log-out-outline" color="primary"></ion-icon>
       </ion-button>
     </ion-buttons>

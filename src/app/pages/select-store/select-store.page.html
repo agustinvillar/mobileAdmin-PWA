@@ -1,0 +1,13 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Seleccione restaurante</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-list>
+    <ion-item *ngFor="let store of stores" (click)="selectStore(store)">
+      <ion-label>{{ store.name }}</ion-label>
+    </ion-item>
+  </ion-list>
+</ion-content>
