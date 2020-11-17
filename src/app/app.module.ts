@@ -18,6 +18,7 @@ import { AngularFirestoreModule } from '@angular/fire/firestore';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 
+import { AuthService } from './services/auth/auth.service'
 import { EventService } from './services/event/event.service'
 import { GeneralService } from './services/API/general/general.service'
 import { SwalService } from './services/swal/swal.service'
@@ -41,6 +42,7 @@ import { StoreService } from './services/store/store.service';
     SplashScreen,
     QRScanner,
     InAppBrowser,
+    AuthService,
     EventService,
     GeneralService,
     SwalService,

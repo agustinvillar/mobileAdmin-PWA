@@ -1,7 +1,7 @@
 import { Component } from '@angular/core';
 import { Store } from '../models/store';
 import { User } from '../models/user';
-import { LoadingService } from '../services/loading/loading.service';
+import { AuthService } from '../services/auth/auth.service';
 import { StoreService } from '../services/store/store.service';
 import { SwalService } from '../services/swal/swal.service';
 import { UserService } from '../services/user/user.service';
@@ -16,8 +16,8 @@ export class TabsPage {
   public store: Store;
 
   constructor(
-    public loadingService: LoadingService, public swalService: SwalService, public userService: UserService,
-    public storeService: StoreService
+    public swalService: SwalService, private authService: AuthService,
+    public userService: UserService, public storeService: StoreService
   ) { }
   
   ngOnInit() { 
@@ -27,10 +27,6 @@ export class TabsPage {
 
   async logout() {
     const res = await this.swalService.showConfirm('¿Seguro que desea cerrar sesión?');
-    if (res.isConfirmed) {
-      await this.loadingService.present();
-      await this.userService.logout();
-      this.loadingService.dismiss();
-    }
+    if (res.isConfirmed) this.authService.logout();
   }
 }

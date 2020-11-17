@@ -2,7 +2,7 @@
   <ion-toolbar>
     <ion-title>{{ store.name }}</ion-title>
     <ion-buttons slot="primary">
-      <ion-button *ngIf="user.isSuperUser" color="secondary" [routerLink]="['/select-store']" routerDirection="root">
+      <ion-button *ngIf="user.isSuperUser" color="secondary" [routerLink]="['/select-store']" routerDirection="backward">
         <ion-icon slot="icon-only" name="swap-horizontal-outline" color="primary"></ion-icon>
       </ion-button>
       <ion-button color="secondary" (click)="logout()">

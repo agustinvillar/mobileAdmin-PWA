@@ -17,15 +17,10 @@ const routes: Routes = [
       },
       {
         path: '',
-        redirectTo: 'scanQR',
+        redirectTo: '/tabs/scanQR',
         pathMatch: 'full'
       }
     ]
-  },
-  {
-    path: '',
-    redirectTo: 'tabs/scanQR',
-    pathMatch: 'full'
   }
 ];
 

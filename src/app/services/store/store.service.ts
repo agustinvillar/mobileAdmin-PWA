@@ -24,26 +24,20 @@ export class StoreService {
     });
   }
 
-  getStoresSubject() {
-    return this.storesSubject;
+  getCurrentStore(): Store {
+    return this.currentStore;
+  }
+  setCurrentStore(store: Store) {
+    set('storeId', store.id);
+    this.currentStore = store;
   }
 
   get(id: string) {
     return this.afs.doc<Store>('stores/' + id).valueChanges();
   }
 
-  getCurrentStore(): Store {
-    return this.currentStore;
-  }
-
-  setCurrentStore(store: Store) {
-    set('storeId', store.id);
-    this.currentStore = store;
-  }
-
   async setStoreById(storeId: string) {
     const store = await this.get(storeId).pipe(take(1)).toPromise();
     this.setCurrentStore(store);
-    Promise.resolve();
   }
 }
