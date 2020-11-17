@@ -11,7 +11,7 @@
 
 <ion-content>
   <ion-list>
-    <ion-item *ngFor="let store of stores" (click)="selectStore(store)">
+    <ion-item *ngFor="let store of stores" (click)="selectStore(store)" button>
       <ion-label>{{ store.name }}</ion-label>
     </ion-item>
   </ion-list>
