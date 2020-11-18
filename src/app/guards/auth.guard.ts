@@ -3,6 +3,7 @@ import { CanLoad, Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { filter, map, take } from 'rxjs/operators';
 
+import { ROUTE_LOGIN } from './../services/constants.service';
 import { AuthService } from './../services/auth/auth.service';
  
 @Injectable({
@@ -19,7 +20,7 @@ export class AuthGuard implements CanLoad {
         if (isAuthenticated) { 
           return true;
         } else {          
-          this.router.navigateByUrl('/login')
+          this.router.navigateByUrl(`/${ROUTE_LOGIN}`)
           return false;
         }
       })

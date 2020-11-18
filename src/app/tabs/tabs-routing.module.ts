@@ -1,5 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
+
+import { ROUTE_TABS, ROUTE_SCAN_QR, ROUTE_DASHBOARD } from './../services/constants.service';
 import { TabsPage } from './tabs.page';
 
 const routes: Routes = [
@@ -8,16 +10,16 @@ const routes: Routes = [
     component: TabsPage,
     children: [
       {
-        path: 'dashboard',
+        path: ROUTE_DASHBOARD,
         loadChildren: () => import('./dashboard/dashboard.module').then(m => m.DashboardPageModule)
       },
       {
-        path: 'scanQR',
+        path: ROUTE_SCAN_QR,
         loadChildren: () => import('./scanQR/scanQR.module').then(m => m.ScanQRPageModule)
       },
       {
         path: '',
-        redirectTo: '/tabs/scanQR',
+        redirectTo: `/${ROUTE_TABS}/${ROUTE_SCAN_QR}`,
         pathMatch: 'full'
       }
     ]

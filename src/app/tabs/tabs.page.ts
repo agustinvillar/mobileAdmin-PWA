@@ -1,6 +1,9 @@
 import { Component } from '@angular/core';
+
 import { Store } from '../models/store';
 import { User } from '../models/user';
+
+import { ROUTE_SELECT_STORE } from '../services/constants.service';
 import { AuthService } from '../services/auth/auth.service';
 import { StoreService } from '../services/store/store.service';
 import { SwalService } from '../services/swal/swal.service';
@@ -12,6 +15,7 @@ import { UserService } from '../services/user/user.service';
   styleUrls: ['tabs.page.scss']
 })
 export class TabsPage {
+  readonly ROUTE_SELECT_STORE: string = `/${ROUTE_SELECT_STORE}`;
   public user: User;
   public store: Store;
 

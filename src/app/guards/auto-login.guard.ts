@@ -3,6 +3,7 @@ import { CanLoad, Router } from '@angular/router';
 import { filter, map, take } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 
+import { ROUTE_TABS } from './../services/constants.service';
 import { AuthService } from '../services/auth/auth.service';
 
 @Injectable({
@@ -18,7 +19,7 @@ export class AutoLoginGuard implements CanLoad {
       map(isAuthenticated => {
         if (isAuthenticated) {
           // Directly open inside area       
-          this.router.navigateByUrl('/tabs', { replaceUrl: true });
+          this.router.navigateByUrl(`/${ROUTE_TABS}`, { replaceUrl: true });
         } else {          
           // Simply allow access to the login
           return true;

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 
+import { ROUTE_TABS } from '../../services/constants.service';
+
 import { Store } from 'src/app/models/store';
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LoadingService } from 'src/app/services/loading/loading.service';
@@ -30,7 +32,7 @@ export class SelectStorePage implements OnInit {
 
   selectStore(store: Store) {
     this.storeService.setCurrentStore(store);
-    this.router.navigateByUrl('/tabs');
+    this.router.navigateByUrl(`/${ROUTE_TABS}`);
   }
 
   async logout() {

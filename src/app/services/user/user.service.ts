@@ -30,5 +30,6 @@ export class UserService {
   async initUser(authData) {
     const user = await this.getCurrent(authData.uid).pipe(take(1)).toPromise();
     this.setCurrentUser(user);
+    return user;
   }
 }

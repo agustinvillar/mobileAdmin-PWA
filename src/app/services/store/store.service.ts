@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { AngularFirestore, AngularFirestoreCollection } from '@angular/fire/firestore';
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
 import { take } from 'rxjs/internal/operators/take';
+
 import { Store } from 'src/app/models/store';
+import { STORAGE_STORE_ID_KEY } from '../constants.service';
 import { set } from "../storage/storage.service";
 
 @Injectable({
@@ -28,7 +30,7 @@ export class StoreService {
     return this.currentStore;
   }
   setCurrentStore(store: Store) {
-    set('storeId', store.id);
+    set(STORAGE_STORE_ID_KEY, store.id);
     this.currentStore = store;
   }
 

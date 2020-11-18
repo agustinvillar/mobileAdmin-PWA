@@ -1,6 +1,8 @@
 import { Injectable } from '@angular/core';
 import { CanLoad, Router } from '@angular/router';
 
+import { STORAGE_STORE_ID_KEY, ROUTE_SELECT_STORE } from './../services/constants.service';
+
 import { get } from "./../services/storage/storage.service";
 import { StoreService } from '../services/store/store.service';
 
@@ -19,12 +21,12 @@ export class SelectStoreGuard implements CanLoad {
     if (!authGuardRes) return false;
     
     try {
-      const storeId = await get('storeId'); 
+      const storeId = await get(STORAGE_STORE_ID_KEY); 
       if (storeId) {
         if (!this.storeService.getCurrentStore()) await this.storeService.setStoreById(storeId);   
         return true;
       } else {
-        this.router.navigateByUrl('/select-store', { replaceUrl:true });
+        this.router.navigateByUrl(`/${ROUTE_SELECT_STORE}`, { replaceUrl:true });
         return false;
       }
     } catch (e) {

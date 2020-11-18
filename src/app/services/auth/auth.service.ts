@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { Router } from '@angular/router';
 import { HttpHeaders, HttpClient } from '@angular/common/http';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { BehaviorSubject } from 'rxjs/internal/BehaviorSubject';
@@ -6,16 +7,16 @@ import { take } from 'rxjs/operators';
 
 import { environment } from '../../../environments/environment';
 import { ERROR_EXPIRED_SESSION } from 'src/app/services/errors.service';
+import { STORAGE_TOKEN_KEY, STORAGE_STORE_ID_KEY, ROUTE_LOGIN, ROUTE_TABS } from '../../services/constants.service';
 
 import { JsonWebToken } from 'src/app/models/jwt';
+import { User } from 'src/app/models/user';
 import { LoadingService } from '../loading/loading.service';
 import { get, set, remove } from "../storage/storage.service";
+import { StoreService } from '../store/store.service';
 import { SwalService } from '../swal/swal.service';
 import { UserService } from '../user/user.service';
-import { Router } from '@angular/router';
 
-const STORAGE_TOKEN_KEY = 'token';
-const STORAGE_STORE_ID_KEY = 'storeId';
 const API_AUTH_ENDPOINT = 'api/Login/Authenticate';
 
 @Injectable({
@@ -26,7 +27,8 @@ export class AuthService {
 
   constructor(
     private router: Router, private http: HttpClient, private afAuth: AngularFireAuth, 
-    private userService: UserService, public loadingService: LoadingService, public swalService: SwalService
+    private userService: UserService, private storeService: StoreService,
+    public loadingService: LoadingService, public swalService: SwalService
   ) { 
     this.authCheck();
   }
@@ -38,8 +40,8 @@ export class AuthService {
   
       const authData = await this.afAuth.authState.pipe(take(1)).toPromise();
       if (!authData) throw(false);
-      
-      await this.userService.initUser(authData);
+            
+      await this.init(authData);
       this.isAuthenticated.next(true);
     } catch (e) {
       this.isAuthenticated.next(false);
@@ -49,10 +51,11 @@ export class AuthService {
   async login(email: string, password: string) {
     try {      
       await this.apiAuth(email, password);
-      const authCredential = await this.afAuth.signInWithEmailAndPassword(email, password);        
-      await this.userService.initUser(authCredential.user);
+      const authCredential = await this.afAuth.signInWithEmailAndPassword(email, password); 
+
+      await this.init(authCredential.user);
       this.isAuthenticated.next(true);
-      await this.router.navigateByUrl('/tabs', { replaceUrl:true });
+      await this.router.navigateByUrl(ROUTE_TABS, { replaceUrl:true });
     } catch(e) {
       remove(STORAGE_TOKEN_KEY);
       Promise.reject(e);
@@ -68,6 +71,11 @@ export class AuthService {
     return set(STORAGE_TOKEN_KEY, response);
   }
 
+  async init(authData) {
+    const user: User = await this.userService.initUser(authData);
+    await this.storeService.setStoreById(user.storeId);
+  }
+
   async logout() {
     await this.loadingService.present();
     remove(STORAGE_TOKEN_KEY);
@@ -75,7 +83,7 @@ export class AuthService {
     this.userService.setCurrentUser(null);
     await this.afAuth.signOut();
     this.isAuthenticated.next(false);
-    await this.router.navigateByUrl('/login', { replaceUrl:true });
+    await this.router.navigateByUrl(`/${ROUTE_LOGIN}`, { replaceUrl:true });
     this.loadingService.dismiss();
   }
 
