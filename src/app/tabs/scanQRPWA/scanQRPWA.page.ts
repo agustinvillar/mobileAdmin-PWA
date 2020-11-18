@@ -1,11 +1,9 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import jsQR from 'jsqr';
 
-import { ERROR_TRY_AGAIN } from '../../services/errors.service';
-import { SEMI_BORDER_BOX_IMG } from '../../services/constants.service';
-
 import { LoadingService } from 'src/app/services/loading/loading.service';
 import { SwalService } from '../../services/swal/swal.service';
+import { ERROR_TRY_AGAIN } from '../../services/errors.service';
 
 @Component({
   selector: 'app-scanQRPWA',
@@ -15,7 +13,6 @@ import { SwalService } from '../../services/swal/swal.service';
 export class ScanQRPWAPage {
   @ViewChild('video', { static: false }) video: ElementRef;
   @ViewChild('canvas', { static: false }) canvas: ElementRef;
-  readonly SEMI_BORDER_BOX_IMG: string = SEMI_BORDER_BOX_IMG;
 
   canvasElement: any;
   videoElement: any;
