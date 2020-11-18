@@ -7,6 +7,7 @@ export const ROUTE_LOGIN = 'login';
 export const ROUTE_SELECT_STORE = 'select-store';
 export const ROUTE_TABS = 'tabs';
 export const ROUTE_SCAN_QR = 'scanQR';
+export const ROUTE_SCAN_QR_PWA = 'scanQRPWA';
 export const ROUTE_DASHBOARD = 'dashboard';
 
 
