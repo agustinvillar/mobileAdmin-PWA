@@ -23,7 +23,6 @@
             </ion-item>
             <div *ngIf="(password.dirty || password.touched) && password.errors" class="errors">
               <span *ngIf="password.errors?.required">Ingresa tu contraseña</span>
-              <span *ngIf="password.errors?.minlength">La contraseña tiene al menos 6 caracteres</span>
             </div>
           </div>
        
