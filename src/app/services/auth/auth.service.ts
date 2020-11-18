@@ -48,10 +48,10 @@ export class AuthService {
     }
   }
 
-  async login(email: string, password: string) {
+  async login(credentials: { email: string, password: string }) {
     try {      
-      await this.apiAuth(email, password);
-      const authCredential = await this.afAuth.signInWithEmailAndPassword(email, password); 
+      await this.apiAuth(credentials);
+      const authCredential = await this.afAuth.signInWithEmailAndPassword(credentials.email, credentials.password); 
 
       await this.init(authCredential.user);
       this.isAuthenticated.next(true);
@@ -62,9 +62,9 @@ export class AuthService {
     }
   }
 
-  async apiAuth(email: string, password: string) {
+  async apiAuth(credentials: { email: string, password: string }) {
     const url = environment.API_URL + API_AUTH_ENDPOINT;
-    const body = { Email: email, Password: password };
+    const body = credentials;
     const options = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
     
     const response = await this.http.post<JsonWebToken>(url, body, options).toPromise();

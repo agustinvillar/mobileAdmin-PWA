@@ -8,22 +8,31 @@
     
     <ion-row class="form-row">
       <ion-col>
-        <!-- <form > -->
+        <form [formGroup]="credentials" (ngSubmit)="login()">
           <div class="input-group">
             <ion-item>
-              <ion-input [(ngModel)]="email" type="email" placeholder="email"></ion-input>
+              <ion-input formControlName="email" type="email" placeholder="email"></ion-input>
             </ion-item>
+            <div *ngIf="(email.dirty || email.touched) && email.errors" class="errors">
+              <span *ngIf="email.errors?.required">Ingresa tu email</span>
+              <span *ngIf="email.errors?.email">Email inválido</span>
+            </div>
+
             <ion-item>
-              <ion-input [(ngModel)]="password" type="password" placeholder="contraseña"></ion-input>
+              <ion-input formControlName="password" type="password" placeholder="contraseña"></ion-input>
             </ion-item>
+            <div *ngIf="(password.dirty || password.touched) && password.errors" class="errors">
+              <span *ngIf="password.errors?.required">Ingresa tu contraseña</span>
+              <span *ngIf="password.errors?.minlength">La contraseña tiene al menos 6 caracteres</span>
+            </div>
           </div>
        
           <div class="ion-padding-top">
-            <ion-button type="submit" expand="block" (click)="login()">
+            <ion-button type="submit" expand="block" [disabled]="!credentials.valid">
               ingresar
             </ion-button>
           </div>
-        <!-- </form> -->
+        </form>
       </ion-col>
     </ion-row>
   </ion-grid>

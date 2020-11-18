@@ -14,8 +14,13 @@ ion-grid {
   .form-row {
     flex: 1;
     align-content: flex-start;
+
+    .errors {
+      color: var(--ion-color-danger);
+    }
   }
 }
+
 ion-toolbar {
   font-size: 1.5rem;
   --border-style: none;
