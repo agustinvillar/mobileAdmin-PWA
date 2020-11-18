@@ -24,6 +24,7 @@ import { GeneralService } from './services/API/general/general.service'
 import { SwalService } from './services/swal/swal.service'
 import { UserService } from './services/user/user.service';
 import { StoreService } from './services/store/store.service';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -35,7 +36,8 @@ import { StoreService } from './services/store/store.service';
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireAuthModule,
     AngularFirestoreModule,
-    HttpClientModule
+    HttpClientModule,
+    ServiceWorkerModule.register('ngsw-worker.js', { enabled: environment.production })
   ],
   providers: [
     StatusBar,
