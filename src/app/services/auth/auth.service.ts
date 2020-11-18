@@ -58,7 +58,7 @@ export class AuthService {
       await this.router.navigateByUrl(ROUTE_TABS, { replaceUrl:true });
     } catch(e) {
       remove(STORAGE_TOKEN_KEY);
-      Promise.reject(e);
+      throw(e);
     }
   }
 
@@ -73,6 +73,8 @@ export class AuthService {
 
   async init(authData) {
     const user: User = await this.userService.initUser(authData);
+    if (!user) throw(false);
+
     await this.storeService.setStoreById(user.storeId);
   }
 
