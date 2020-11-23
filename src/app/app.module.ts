@@ -8,7 +8,6 @@ import { environment } from '../environments/environment';
 import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
-import { QRScanner } from '@ionic-native/qr-scanner/ngx';
 import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 
 import { AngularFireModule } from '@angular/fire';
@@ -42,7 +41,6 @@ import { ServiceWorkerModule } from '@angular/service-worker';
   providers: [
     StatusBar,
     SplashScreen,
-    QRScanner,
     InAppBrowser,
     AuthService,
     EventService,
