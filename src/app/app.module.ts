@@ -13,6 +13,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { AngularFireModule } from '@angular/fire';
 import { AngularFireAuthModule } from '@angular/fire/auth';
 import { AngularFirestoreModule } from '@angular/fire/firestore';
+import { ServiceWorkerModule } from '@angular/service-worker';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -20,10 +21,10 @@ import { AppComponent } from './app.component';
 import { AuthService } from './services/auth/auth.service'
 import { EventService } from './services/event/event.service'
 import { GeneralService } from './services/API/general/general.service'
+import { OrderService } from './services/order/order.service';
+import { StoreService } from './services/store/store.service';
 import { SwalService } from './services/swal/swal.service'
 import { UserService } from './services/user/user.service';
-import { StoreService } from './services/store/store.service';
-import { ServiceWorkerModule } from '@angular/service-worker';
 
 @NgModule({
   declarations: [AppComponent],
@@ -45,9 +46,10 @@ import { ServiceWorkerModule } from '@angular/service-worker';
     AuthService,
     EventService,
     GeneralService,
+    OrderService,
     SwalService,
-    UserService,
     StoreService,
+    UserService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

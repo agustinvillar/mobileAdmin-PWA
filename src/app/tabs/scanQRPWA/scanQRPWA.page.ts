@@ -1,9 +1,13 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
+import { ModalController } from '@ionic/angular';
 import jsQR from 'jsqr';
 
+import { ERROR_INVALID_QR } from 'src/app/services/errors.service';
 import { LoadingService } from 'src/app/services/loading/loading.service';
-import { SwalService } from '../../services/swal/swal.service';
-import { ERROR_TRY_AGAIN } from '../../services/errors.service';
+import { StoreService } from 'src/app/services/store/store.service';
+import { SwalService } from 'src/app/services/swal/swal.service';
+import { ticketQRCode } from 'src/app/models/ticketQRCode';
+import { OrderStatusChangePage } from 'src/app/pages/order-status-change/order-status-change.page';
 
 @Component({
   selector: 'app-scanQRPWA',
@@ -19,7 +23,10 @@ export class ScanQRPWAPage {
   canvasContext: any;
   scanActive: boolean = true;
   
-  constructor(public swalService: SwalService, public loadingService: LoadingService) 
+  constructor(
+    public storeService: StoreService, public swalService: SwalService, public loadingService: LoadingService,
+    public modalController: ModalController
+  ) 
   { }
 
   ngAfterViewInit() {
@@ -81,12 +88,26 @@ export class ScanQRPWAPage {
       inversionAttempts: 'dontInvert'
     });
  
-    if (code) {
-      const scanResult = code.data;
-      scanResult ?
-        await this.swalService.showGeneric(scanResult, 'info') :
-        await this.swalService.showGeneric(ERROR_TRY_AGAIN, 'error');
-      this.startScan();
+    if (code && code.data) {
+      const scanResult: ticketQRCode = JSON.parse(code.data);
+      const store = this.storeService.getCurrentStore();
+
+      if (scanResult.storeId !== store.id) {
+        await this.swalService.showGeneric(ERROR_INVALID_QR, 'error');
+        return requestAnimationFrame(this.scan.bind(this));
+      }
+      
+      const modal = await this.modalController.create({
+        component: OrderStatusChangePage,
+        componentProps: {
+          orderId: scanResult.orderId,
+          store: store
+        }
+      });
+      await modal.present();
+      await modal.onWillDismiss();
+      requestAnimationFrame(this.scan.bind(this));
+
     } else if (this.scanActive) {
       requestAnimationFrame(this.scan.bind(this));
     }

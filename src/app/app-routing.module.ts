@@ -27,6 +27,10 @@ const routes: Routes = [
     path: '**',
     redirectTo: `/${ROUTE_LOGIN}`,
     pathMatch: 'full'
+  },
+  {
+    path: 'order-status-change',
+    loadChildren: () => import('./pages/order-status-change/order-status-change.module').then( m => m.OrderStatusChangePageModule)
   }
 ];
 @NgModule({

@@ -1,0 +1,51 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>Orden #{{ orderData?.order.orderNumber }}</ion-title>
+    <ion-buttons slot="end">
+      <ion-button (click)="dismiss()">
+        <ion-icon name="close-outline" color="primary"></ion-icon>
+      </ion-button>
+    </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-grid>
+    <ion-row>
+      <ion-col>
+        <b>Estado: </b>
+        <ion-chip color="{{ orderData?.order.status }}">
+          {{ orderData?.order.status.toUpperCase() }}
+        </ion-chip>
+      </ion-col>
+    </ion-row>
+    <ion-row *ngIf="orderData?.order.userName">
+      <ion-col>
+        <b>Usuario: </b>
+        {{ orderData?.order.userName }}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col *ngIf="orderData?.order.guestComment">
+        <b>Comentario:</b>
+        {{ orderData?.order.guestComment }}
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col>
+        <b>Total: </b>
+        ${{ orderData?.order.total }}
+      </ion-col>
+    </ion-row>
+
+    <ion-item-divider mode="md"></ion-item-divider>
+
+    <ion-row class="buttons-row">
+      <ion-col *ngFor="let action of orderData?.actions" size="12">
+        <ion-button expand="block" color="{{ action }}" (click)="updateStatus(action)">
+          {{ action.toUpperCase() }}
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+</ion-content>
