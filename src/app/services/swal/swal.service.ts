@@ -25,6 +25,7 @@ export class SwalService {
     return Swal.fire({ 
       html: this.getInfoHtml(message, 'question'), 
       showCancelButton: true,
+      reverseButtons: true,
       ...{ ...this.defaultOptions, ...options } 
     });
   }
@@ -53,22 +54,17 @@ export class SwalService {
       </div>`;
   }
 
-  getStatusChangeHtml(action: string) {
-    const img = `${this.imgsFolder}/${this.getTypeImg('question')}`;
-
-    return `<div class='swal-container'>
-      <ion-row class='swal-img'>
-        <ion-col><img src="${img}"></ion-col>
+  getStatusChangeHtml(action: string) {  
+    return `<ion-row>
+        <ion-col>Nuevo estado:</ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
-          Nuevo estado:
-          <ion-badge class="status-badge" color="${action}">
+        <ion-col class="status-badge">
+          <ion-badge color="${action}" mode="ios">
             ${ action.toUpperCase() }
           </ion-badge>
         </ion-col>
-      </ion-row>
-    </div>`;
+      </ion-row>`;
   }
 
   getTypeImg(type: string) {

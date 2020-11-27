@@ -26,13 +26,12 @@ export class OrderService {
         case orderStatus.Pendiente:
           actions = [ orderStatus.Aceptado, orderStatus.Cancelado ]; break;
         case orderStatus.Aceptado:
-          actions = [ orderStatus.Preparando, orderStatus.Cancelado ]; break;
+          actions = [ orderStatus.Pronto, orderStatus.Cancelado ]; break;
         case orderStatus.Preparando:
-          actions = [ orderStatus.Servido ]; break;
-        case orderStatus.Pronto: 
-          break;
-        case orderStatus.Cancelado: 
-          break;
+          actions = [ orderStatus.Servido, orderStatus.Cancelado ]; break;          
+        case orderStatus.Pronto: break;
+        case orderStatus.Cancelado: break;
+        case orderStatus.Servido: break;
         default: 
           throw(ERROR_TRY_AGAIN);
       }

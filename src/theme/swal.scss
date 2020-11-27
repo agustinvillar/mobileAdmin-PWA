@@ -8,6 +8,7 @@
     font-size: 1rem;
   
     .swal2-actions {
+      padding: 0 0.6em;
       button {
         font-size: 1.2rem;
         font-family: Isidora;
@@ -28,15 +29,15 @@
       }
     }
 
-    ion-badge {
-      --padding-top: 0.5rem;
-      --padding-bottom: 0.4rem;
-      --padding-start: 0.4rem;
-      --padding-end: 0.4rem;
-    }
     .status-badge {
-      margin: 0 0.4rem;
-      vertical-align: bottom;
+      ion-badge {
+        --padding-top: 0.75rem;
+        --padding-bottom: 0.6rem;
+        --padding-start: 0.6rem;
+        --padding-end: 0.6rem;
+        font-weight: normal;
+        font-size: 0.9rem;
+      }
     }
   }
 }

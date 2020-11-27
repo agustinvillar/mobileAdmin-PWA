@@ -11,49 +11,55 @@
 
 <ion-content>
   <ion-grid>
-    <ion-row>
-      <ion-col>
-        <b>Estado: </b>
-        <ion-chip color="{{ orderData?.order.status }}">
-          {{ orderData?.order.status.toUpperCase() }}
-        </ion-chip>
-      </ion-col>
-    </ion-row>
+    <ion-list>
+      <ion-item>
+        <ion-label>
+          <h2 class="status-content">
+            Estado
+            <ion-chip color="{{ orderData?.order.status }}">
+              {{ orderData?.order.status.toUpperCase() }}
+            </ion-chip>
+          </h2>
+        </ion-label>
+      </ion-item>
+      
+      <ion-item *ngIf="orderData?.order.userName">
+        <ion-label>
+          <h2>Usuario</h2>
+          <h3>{{ orderData?.order.userName }}</h3>
+        </ion-label>
+      </ion-item>
 
-    <ion-row *ngIf="orderData?.order.userName">
-      <ion-col>
-        <b>Usuario: </b>
-        {{ orderData?.order.userName }}
-      </ion-col>
-    </ion-row>
+      <ion-item>
+        <ion-label>
+          <h2>Items</h2>
+          <h3 *ngFor="let item of orderData?.order.items">
+            - {{ item.name }}
+            <span *ngFor="let option of item.options" class="text-light">({{ option.name }}) </span>
+            <span *ngIf="item.quantity > 1"><b> (x {{ item.quantity }})</b></span>
+          </h3>
+        </ion-label>
+      </ion-item>
+      
+      <ion-item *ngIf="orderData?.order.guestComment">
+        <ion-label>
+          <h2>Comentario</h2>
+          <h3>{{ orderData?.order.guestComment }}</h3>
+        </ion-label>
+      </ion-item>
 
-    <ion-row>
-      <ion-col><b>Items: </b></ion-col>
-    </ion-row>
-    <ion-row>
-      <ion-col *ngFor="let item of orderData?.order.items" class="ion-margin-start">
-        - {{ item.name }}
-        <span *ngFor="let option of item.options" class="text-light">({{ option.name }}) </span>
-        <span *ngIf="item.quantity > 1"><b> (x {{ item.quantity }})</b></span>
-      </ion-col>
-    </ion-row>
+      <ion-item>
+        <ion-label>
+          <h2>TOTAL</h2>
+          <h3>${{ orderData?.order.total }}</h3>
+        </ion-label>
+      </ion-item>
+    </ion-list>
+  </ion-grid>
+</ion-content>
 
-    <ion-row>
-      <ion-col *ngIf="orderData?.order.guestComment">
-        <b>Comentario:</b>
-        {{ orderData?.order.guestComment }}
-      </ion-col>
-    </ion-row>
-
-    <ion-row>
-      <ion-col>
-        <b>Total: </b>
-        ${{ orderData?.order.total }}
-      </ion-col>
-    </ion-row>
-
-    <ion-item-divider mode="md"></ion-item-divider>
-
+<ion-footer>
+  <ion-toolbar>
     <ion-row class="buttons-row">
       <ion-col *ngFor="let action of orderData?.actions" size="12">
         <ion-button expand="block" color="{{ action }}" (click)="updateStatus(action)">
@@ -61,5 +67,5 @@
         </ion-button>
       </ion-col>
     </ion-row>
-  </ion-grid>
-</ion-content>
+  </ion-toolbar>
+</ion-footer>
