@@ -5,6 +5,11 @@ export enum cancelSource {
   pending = 'pendiente'
 }
 
+export enum extraTab {
+  Table = 'Mesa',
+  TakeAway = 'TakeAway'
+}
+
 export enum orderStatus {
   Pendiente = 'pendiente',
   Preparando = 'preparando',

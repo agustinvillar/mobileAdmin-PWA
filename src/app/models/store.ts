@@ -1,16 +1,15 @@
 
 // import { Table } from "./table";
-// import { Extra } from "./extra";
 // import { CategoryStore } from "./categoryStore";
 // import { StoreFeedback } from "./storeFeedback";
 // import { CustomDate } from "./customDate";
 // import { TableOpeningFamily } from "./tableOpeningFamily";
 // import { Promotions } from "./promotions";
-// import { BlacklistedCustomer } from "./blacklistedCustomer";
 // import { DaySchedule } from "./daySchedule";
 // import { Market } from "./market";
-// import { Cities } from "./cities";
 // import { OfferCupon } from "./offerCupon";
+
+import { Extra } from './extra';
 
 export enum PAYMENT_PROVIDER {
   NONE = 0, MERCADO_PAGO = 1, GEOPAY = 2
@@ -23,12 +22,10 @@ export class Store {
   allowPrinting?: boolean;
   printer?: string;
   availability?:boolean;
-  // blacklist?:Array<BlacklistedCustomer>;
   bookingGuestQty?:number;
   maxUsQty?: number;
   cardDiscounts?:any;
   // categoryStore?: Array<CategoryStore>;
-  // city?: Cities;
   closes?: string;
   comissionPercentage?: number;
   commentNumber?: number;
@@ -43,7 +40,7 @@ export class Store {
   description?:string;
   disableBookings?: boolean;
   distanceFromUser?: number;
-  // extras?:Array<Extra>;
+  extras?:Array<Extra>;
   feedbackCount?: number;
   hasActivePromotions?: boolean;
   hasAvailability: boolean;
@@ -96,6 +93,5 @@ export class Store {
   class?: string;
   // offerCupons?: Array<OfferCupon>;
 
-  constructor() {
-  }
+  constructor() { }
 }

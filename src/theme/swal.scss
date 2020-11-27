@@ -27,5 +27,16 @@
         border: solid 1px var(--ion-color-primary);
       }
     }
+
+    ion-badge {
+      --padding-top: 0.5rem;
+      --padding-bottom: 0.4rem;
+      --padding-start: 0.4rem;
+      --padding-end: 0.4rem;
+    }
+    .status-badge {
+      margin: 0 0.4rem;
+      vertical-align: bottom;
+    }
   }
 }

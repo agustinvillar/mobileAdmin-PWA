@@ -2,11 +2,13 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { orderStatus } from 'src/app/models/enums';
 
+import { ERROR_TRY_AGAIN } from 'src/app/services/errors.service';
 import { Order } from 'src/app/models/order';
 import { Store } from 'src/app/models/store';
 
 import { LoadingService } from 'src/app/services/loading/loading.service';
 import { OrderService } from 'src/app/services/order/order.service';
+import { SwalService } from 'src/app/services/swal/swal.service';
 
 @Component({
   selector: 'app-order-status-change',
@@ -20,7 +22,7 @@ export class OrderStatusChangePage implements OnInit {
 
   constructor(
     public modalController: ModalController, public orderService: OrderService, 
-    public loadingService: LoadingService
+    public loadingService: LoadingService, public swalService: SwalService
   ) { }
 
   async ngOnInit() {
@@ -29,12 +31,22 @@ export class OrderStatusChangePage implements OnInit {
     this.loadingService.dismiss();
   }
 
-  updateStatus(action: orderStatus) {
-    
+  async updateStatus(action: orderStatus) {
+    try {
+      const confirm = await this.swalService.showStatusChangeConfirm(action);
+      if (!confirm.isConfirmed) return;
+  
+      await this.loadingService.present();
+      await this.dismiss();
+      await this.loadingService.dismiss();
+      await this.swalService.showNotification('¡Estado actualizado!');
+    } catch (e) {
+      await this.swalService.showGeneric(ERROR_TRY_AGAIN, 'error');
+    }
   }
 
   dismiss() {
-    this.modalController.dismiss();
+    return this.modalController.dismiss();
   }
 
 }

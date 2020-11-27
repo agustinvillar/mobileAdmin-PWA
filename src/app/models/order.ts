@@ -1,34 +1,35 @@
-// import { CartItem } from "./cart-item";
-// import { Extra } from "./extra";
-import * as Enums from './enums';
+import { CartItem } from "./cart-item";
+import { cancelSource, orderStatus } from './enums';
+import { Extra } from "./extra";
 
 export class Order {
   id?: string;
   userId?: string;
+  userName?:string;
+  userPhone?: string;
   total?: number;
   address?: string;
-  status?: Enums.orderStatus;
+  status?: orderStatus;
   orderNumber?: string;
   madeAt?: string;
-  createdAt?: number;
   orderType?: string;
+  createdAt?: number;
   updatedAt?: number;
   tableOpeningFamilyId?: string;
   tableOpeningId?: string;
   estimatedTimeTA?: string;
   takeAwayHour?:string;
   alertShowed?: boolean;
-  // items?: Array<CartItem>;
+  items?: Array<CartItem>;
   isBooking?: boolean;
   bookingId?:string;
   orderDate?:string;
   orderDateSimple?:string;
   printed?: boolean = false;
   cancelMotive?: string;
-  // extras?: Array<Extra>;
-  cancelSource?:Enums.cancelSource;
+  extras?: Array<Extra>;
+  cancelSource?: cancelSource;
   paymentId?:string;
-  userName?:string;
   closed?:boolean;
   timerToCancel?:number;
   guestComment?: string;
@@ -37,4 +38,7 @@ export class Order {
     name: string,
     logoImage?:string
   };
+  paidBy?: string;
+
+  constructor() { }
 }

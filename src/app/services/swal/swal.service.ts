@@ -29,6 +29,17 @@ export class SwalService {
     });
   }
 
+  showNotification(message: string) {
+    return this.showGeneric(message, 'success', { showConfirmButton: false, timer: 2000 });
+  }
+
+  showStatusChangeConfirm(action: string) {
+    return this.showConfirm('', { 
+      html: this.getStatusChangeHtml(action),
+      confirmButtonText: 'confirmar'
+    });
+  }
+
   getInfoHtml(content: string, type: string) {
     const img = `${this.imgsFolder}/${this.getTypeImg(type)}`;
 
@@ -40,6 +51,24 @@ export class SwalService {
         <ion-col>${content}</ion-col>
       </ion-row>
       </div>`;
+  }
+
+  getStatusChangeHtml(action: string) {
+    const img = `${this.imgsFolder}/${this.getTypeImg('question')}`;
+
+    return `<div class='swal-container'>
+      <ion-row class='swal-img'>
+        <ion-col><img src="${img}"></ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col>
+          Nuevo estado:
+          <ion-badge class="status-badge" color="${action}">
+            ${ action.toUpperCase() }
+          </ion-badge>
+        </ion-col>
+      </ion-row>
+    </div>`;
   }
 
   getTypeImg(type: string) {

@@ -19,18 +19,32 @@
         </ion-chip>
       </ion-col>
     </ion-row>
+
     <ion-row *ngIf="orderData?.order.userName">
       <ion-col>
         <b>Usuario: </b>
         {{ orderData?.order.userName }}
       </ion-col>
     </ion-row>
+
+    <ion-row>
+      <ion-col><b>Items: </b></ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col *ngFor="let item of orderData?.order.items" class="ion-margin-start">
+        - {{ item.name }}
+        <span *ngFor="let option of item.options" class="text-light">({{ option.name }}) </span>
+        <span *ngIf="item.quantity > 1"><b> (x {{ item.quantity }})</b></span>
+      </ion-col>
+    </ion-row>
+
     <ion-row>
       <ion-col *ngIf="orderData?.order.guestComment">
         <b>Comentario:</b>
         {{ orderData?.order.guestComment }}
       </ion-col>
     </ion-row>
+
     <ion-row>
       <ion-col>
         <b>Total: </b>
