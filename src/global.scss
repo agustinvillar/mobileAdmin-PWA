@@ -36,3 +36,17 @@
 .text-light {
   color: var(--ion-color-medium);
 } 
+
+//prevent autorotate
+// @media only screen and (min-width: 320px) and (max-width: 890px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {
+//   html {
+//     transform: rotate(-90deg);
+//     transform-origin: left top;
+//     width: 100vh;
+//     height: 100vw !important;
+//     overflow-x: hidden;
+//     position: absolute;
+//     top: 100%;
+//     left: 0;
+//   }
+// }
