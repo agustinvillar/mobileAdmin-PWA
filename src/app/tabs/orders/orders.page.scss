@@ -1,3 +1,12 @@
 ion-segment-button {
   --color-checked: var(--ion-color-primary);
 }
+
+ion-item-divider {
+  --padding-top: 0.4rem;
+  --padding-bottom: 0.4rem;
+  --inner-padding-end: 0.8rem;
+  font-size: 1rem;
+  font-weight: normal;
+  text-transform: uppercase;
+}
