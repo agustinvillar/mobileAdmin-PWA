@@ -19,6 +19,12 @@ export enum orderStatus {
   Pronto = 'pronto'
 }
 
+export enum orderType {
+  TakeAway = "TakeAway",
+  Reserva = "Reserva",
+  Mesa = "Mesas"
+}
+
 export enum userType {
   cahseer = 'Cajero',
   waiter = 'Mozo',

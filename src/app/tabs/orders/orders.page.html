@@ -4,10 +4,115 @@
 
 <ion-content [fullscreen]="true">
   <ion-grid>
-    <ion-row>
-      <ion-col>
-        <h1>Órdenes</h1>
-      </ion-col>
-    </ion-row>
+    <ion-segment (ionChange)="segmentChanged($event)" value="{{ segments.Mesa }}">
+      <ion-segment-button value="{{ segments.Mesa }}">
+        <ion-label>{{ segments.Mesa }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="{{ segments.TakeAway }}">
+        <ion-label>{{ segments.TakeAway }}</ion-label>
+      </ion-segment-button>
+      <ion-segment-button value="{{ segments.Reserva }}">
+        <ion-label>{{ segments.Reserva }}</ion-label>
+      </ion-segment-button>
+    </ion-segment>
+
+    <ion-list>
+      <div *ngIf="[segments.Mesa, segments.Reserva].includes(currentSegment)">
+        <ion-item-group>
+          <ion-item-divider color="{{ status.Preparando }}">
+            <ion-label>Preparando</ion-label>
+            <ion-icon *ngIf="collapsed[status.Preparando]" name="chevron-down-outline" slot="end" (click)="toggleList(status.Preparando)"></ion-icon>
+            <ion-icon *ngIf="!collapsed[status.Preparando]" name="chevron-up-outline" slot="end" (click)="toggleList(status.Preparando)"></ion-icon>
+          </ion-item-divider>
+        
+          <div *ngIf="!collapsed[status.Preparando]">
+            <ion-item>
+              <ion-label>Orden</ion-label>
+            </ion-item>
+          </div>
+        </ion-item-group>
+  
+        <ion-item-group>
+          <ion-item-divider color="{{ status.Servido }}">
+            <ion-label>Servido</ion-label>
+            <ion-icon *ngIf="collapsed[status.Servido]" name="chevron-down-outline" slot="end" (click)="toggleList(status.Servido)"></ion-icon>
+            <ion-icon *ngIf="!collapsed[status.Servido]" name="chevron-up-outline" slot="end" (click)="toggleList(status.Servido)"></ion-icon>
+          </ion-item-divider>
+        
+          <div *ngIf="!collapsed[status.Servido]">
+            <ion-item>
+              <ion-label>Orden</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Orden</ion-label>
+            </ion-item>
+          </div>
+        </ion-item-group>
+      </div>
+
+      <div *ngIf="currentSegment === segments.TakeAway">
+        <ion-item-group>
+          <ion-item-divider color="{{ status.Pendiente }}">
+            <ion-label>Pendiente</ion-label>
+            <ion-icon *ngIf="collapsed[status.Pendiente]" name="chevron-down-outline" slot="end" (click)="toggleList(status.Pendiente)"></ion-icon>
+            <ion-icon *ngIf="!collapsed[status.Pendiente]" name="chevron-up-outline" slot="end" (click)="toggleList(status.Pendiente)"></ion-icon>
+          </ion-item-divider>
+        
+          <div *ngIf="!collapsed[status.Pendiente]">
+            <ion-item>
+              <ion-label>Orden</ion-label>
+            </ion-item>
+          </div>
+        </ion-item-group>
+  
+        <ion-item-group>
+          <ion-item-divider color="{{ status.Aceptado }}">
+            <ion-label>Aceptado</ion-label>
+            <ion-icon *ngIf="collapsed[status.Aceptado]" name="chevron-down-outline" slot="end" (click)="toggleList(status.Aceptado)"></ion-icon>
+            <ion-icon *ngIf="!collapsed[status.Aceptado]" name="chevron-up-outline" slot="end" (click)="toggleList(status.Aceptado)"></ion-icon>
+          </ion-item-divider>
+        
+          <div *ngIf="!collapsed[status.Aceptado]">
+            <ion-item>
+              <ion-label>Orden</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Orden</ion-label>
+            </ion-item>
+          </div>
+        </ion-item-group>
+  
+        <ion-item-group>
+          <ion-item-divider color="{{ status.Pronto }}">
+            <ion-label>Pronto</ion-label>
+            <ion-icon *ngIf="collapsed[status.Pronto]" name="chevron-down-outline" slot="end" (click)="toggleList(status.Pronto)"></ion-icon>
+            <ion-icon *ngIf="!collapsed[status.Pronto]" name="chevron-up-outline" slot="end" (click)="toggleList(status.Pronto)"></ion-icon>
+          </ion-item-divider>
+        
+          <div *ngIf="!collapsed[status.Pronto]">
+            <ion-item>
+              <ion-label>Orden</ion-label>
+            </ion-item>
+            <ion-item>
+              <ion-label>Orden</ion-label>
+            </ion-item>
+          </div>
+        </ion-item-group>
+      </div>
+
+      <ion-item-group>
+        <ion-item-divider color="{{ status.Cancelado }}">
+          <ion-label>Cancelado</ion-label>
+          <ion-icon *ngIf="collapsed[status.Cancelado]" name="chevron-down-outline" slot="end" (click)="toggleList(status.Cancelado)"></ion-icon>
+          <ion-icon *ngIf="!collapsed[status.Cancelado]" name="chevron-up-outline" slot="end" (click)="toggleList(status.Cancelado)"></ion-icon>
+        </ion-item-divider>
+      
+        <div *ngIf="!collapsed[status.Cancelado]">
+          <ion-item>
+            <ion-label>Orden</ion-label>
+          </ion-item>
+        </div>
+      </ion-item-group>
+    </ion-list>
   </ion-grid>
 </ion-content>
