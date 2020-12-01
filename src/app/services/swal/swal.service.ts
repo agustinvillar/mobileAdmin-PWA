@@ -73,7 +73,7 @@ export class SwalService {
 
     if (action === orderStatus.Cancelado) { 
       html += `<ion-row>
-          <ion-col>Motivo:</ion-col>
+          <ion-col class="ion-text-start ion-margin-top">Motivo:</ion-col>
         </ion-row>`;
     }
     

@@ -1,6 +1,6 @@
 .swal2-container {
   .swal2-popup {
-    width: 90%;
+    width: 90% !important;
     max-width: 400px;
     border-radius: 12px;
     padding: 1em 0;
@@ -8,10 +8,11 @@
     font-size: 1rem;
 
     .swal2-textarea {
+      margin-top: 0;
       font-size: 0.9rem;
     }
     textarea {
-      border: solid 1px var(--ion-color-dark);
+      border: solid 1px var(--ion-color-medium);
       border-radius: 12px;
       overflow: auto;
       outline: none;
