@@ -91,6 +91,6 @@ export class AuthService {
 
   async apiLogout() {    
     await this.swalService.showGeneric(ERROR_EXPIRED_SESSION, 'error');
-    this.logout();
+    await this.logout();
   }
 }

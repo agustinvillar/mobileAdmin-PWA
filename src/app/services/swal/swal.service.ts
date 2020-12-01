@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { orderStatus } from 'src/app/models/enums';
 import Swal from 'sweetalert2'
 
 @Injectable({
@@ -35,10 +36,13 @@ export class SwalService {
   }
 
   showStatusChangeConfirm(action: string) {
-    return this.showConfirm('', { 
+    const swal = { 
       html: this.getStatusChangeHtml(action),
       confirmButtonText: 'confirmar'
-    });
+    };
+    if (action === orderStatus.Cancelado) { swal['input'] = 'textarea'; }
+
+    return this.showConfirm('', swal);
   }
 
   getInfoHtml(content: string, type: string) {
@@ -55,7 +59,7 @@ export class SwalService {
   }
 
   getStatusChangeHtml(action: string) {  
-    return `<ion-row>
+    let html = `<ion-row>
         <ion-col>Nuevo estado:</ion-col>
       </ion-row>
       <ion-row>
@@ -65,6 +69,14 @@ export class SwalService {
           </ion-badge>
         </ion-col>
       </ion-row>`;
+
+    if (action === orderStatus.Cancelado) { 
+      html += `<ion-row>
+          <ion-col>Motivo de cancelación:</ion-col>
+        </ion-row>`;
+    }
+    
+    return html;
   }
 
   getTypeImg(type: string) {
