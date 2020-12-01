@@ -38,6 +38,7 @@ export class SwalService {
   showStatusChangeConfirm(action: string) {
     const swal = { 
       html: this.getStatusChangeHtml(action),
+      allowOutsideClick: false,
       confirmButtonText: 'confirmar'
     };
     if (action === orderStatus.Cancelado) { swal['input'] = 'textarea'; }
@@ -72,7 +73,7 @@ export class SwalService {
 
     if (action === orderStatus.Cancelado) { 
       html += `<ion-row>
-          <ion-col>Motivo de cancelación:</ion-col>
+          <ion-col>Motivo:</ion-col>
         </ion-row>`;
     }
     
