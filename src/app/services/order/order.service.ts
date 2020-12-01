@@ -74,6 +74,7 @@ export class OrderService {
   }) {
     try {
       const incremental = await this.generalService.getServerIncremental();
+      if (!incremental) return Promise.reject();
       
       await this.afs.doc<Order>('orders/' + data.orderId).update({
         status: data.action,

@@ -20,10 +20,10 @@ export class GeneralService {
   async getJsonWebToken() {
     try {
       const token = await get(STORAGE_TOKEN_KEY);
-      if (!token) throw('');
-
-      const jwt = JSON.parse(token) as JsonWebToken;
-      if (!jwt) throw('');
+      if (!token) throw('No token error');
+      
+      const jwt = token as JsonWebToken;
+      if (!jwt) throw('JWT parsing error');
 
       let isExpired = true;
       if (jwt && jwt.Expires)

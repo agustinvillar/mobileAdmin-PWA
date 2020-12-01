@@ -47,9 +47,10 @@ export class OrderStatusChangePage implements OnInit {
         cancelMotive: action === orderStatus.Cancelado ? confirm.value : null
       });
       await this.dismiss();
-      await this.loadingService.dismiss();
+      await this.loadingService.dismiss();      
       await this.swalService.showNotification('¡Estado actualizado!');
     } catch (e) {
+      await this.dismiss();
       await this.swalService.showGeneric(ERROR_TRY_AGAIN, 'error');
     }
   }
