@@ -1,6 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
-import { orderStatus } from 'src/app/models/enums';
+import { orderStatus, orderType } from 'src/app/models/enums';
 
 import { ERROR_TRY_AGAIN, ERROR_INVALID_CANCEL_MSG } from 'src/app/services/errors.service';
 import { Order } from 'src/app/models/order';
@@ -9,6 +9,8 @@ import { Store } from 'src/app/models/store';
 import { LoadingService } from 'src/app/services/loading/loading.service';
 import { OrderService } from 'src/app/services/order/order.service';
 import { SwalService } from 'src/app/services/swal/swal.service';
+import { BookingService } from 'src/app/services/booking/booking.service';
+import { TakeAwayService } from 'src/app/services/takeAway/take-away.service';
 
 @Component({
   selector: 'app-order-status-change',
@@ -17,11 +19,13 @@ import { SwalService } from 'src/app/services/swal/swal.service';
 })
 export class OrderStatusChangePage implements OnInit {
   @Input() orderId: string;
+  @Input() orderType: orderType;
   @Input() store: Store;
   orderData: { order: Order, actions: orderStatus[] };
 
   constructor(
-    public modalController: ModalController, public orderService: OrderService, 
+    public modalController: ModalController, private orderService: OrderService, 
+    private bookingService: BookingService, private takeAwayService: TakeAwayService, 
     public loadingService: LoadingService, public swalService: SwalService
   ) { }
 
@@ -41,17 +45,51 @@ export class OrderStatusChangePage implements OnInit {
       }
   
       await this.loadingService.present();
+      await this.checkPreconditions(action);
+
       await this.orderService.updateStatus({ 
         orderId: this.orderId, 
         action,
         cancelMotive: action === orderStatus.Cancelado ? confirm.value : null
       });
+      this.swalService.showNotification('¡Estado actualizado!');
+      
       await this.dismiss();
-      await this.loadingService.dismiss();      
-      await this.swalService.showNotification('¡Estado actualizado!');
+      await this.loadingService.dismiss();   
+
     } catch (e) {
-      await this.dismiss();
-      await this.swalService.showGeneric(ERROR_TRY_AGAIN, 'error');
+      if (!e?.keepModal) { 
+        this.swalService.showGeneric(ERROR_TRY_AGAIN, 'error'); 
+        this.dismiss();
+      }
+    }
+  }
+
+  async checkPreconditions(action: orderStatus) {
+    try {
+      if (this.orderType === orderType.Reserva) {
+        const order: Order = await this.orderService.get(this.orderId);
+  
+        if (action === orderStatus.Servido) {
+          await this.bookingService.canServe(order);
+        } else if (action === orderStatus.Cancelado) {
+          await this.bookingService.refundBooking(order);
+        }      
+  
+      } else if (this.orderType === orderType.TakeAway) {
+        if (action === orderStatus.Aceptado) {
+          await this.takeAwayService.canAccept(this.orderId);
+        } else if (action === orderStatus.Pronto) {
+          const order: Order = await this.orderService.get(this.orderId);
+          await this.takeAwayService.canPrepare(order);
+        } else if (action === orderStatus.Cancelado) {
+  
+        }
+      }
+
+    } catch (e) {
+      this.swalService.showGeneric(e, 'error');
+      throw { keepModal: true };
     }
   }
 

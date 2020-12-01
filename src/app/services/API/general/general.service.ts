@@ -6,7 +6,6 @@ import { environment } from 'src/environments/environment';
 
 import { JsonWebToken } from 'src/app/models/jwt';
 import { STORAGE_TOKEN_KEY } from 'src/app/services/constants.service';
-import { EventService } from 'src/app/services/event/event.service';
 import { get, set } from "src/app/services/storage/storage.service";
 import { AuthService } from '../../auth/auth.service';
 
@@ -15,7 +14,7 @@ import { AuthService } from '../../auth/auth.service';
 })
 export class GeneralService {
 
-  constructor(public http: HttpClient, private events: EventService, public authService: AuthService) { }
+  constructor(public http: HttpClient, public authService: AuthService) { }
 
   async getJsonWebToken() {
     try {

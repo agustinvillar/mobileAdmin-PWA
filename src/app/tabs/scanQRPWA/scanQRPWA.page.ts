@@ -101,6 +101,7 @@ export class ScanQRPWAPage {
         component: OrderStatusChangePage,
         componentProps: {
           orderId: scanResult.orderId,
+          orderType: scanResult.orderType,
           store: store
         }
       });

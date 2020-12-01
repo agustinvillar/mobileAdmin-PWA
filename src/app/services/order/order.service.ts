@@ -41,10 +41,11 @@ export class OrderService {
         case orderStatus.Aceptado:
           actions = [ orderStatus.Pronto, orderStatus.Cancelado ]; break;
         case orderStatus.Preparando:
-          actions = [ orderStatus.Servido, orderStatus.Cancelado ]; break;          
+          actions = [ orderStatus.Servido, orderStatus.Cancelado ]; break;
+        case orderStatus.Servido: 
+          actions = [ orderStatus.Cancelado ]; break;
         case orderStatus.Pronto: break;
         case orderStatus.Cancelado: break;
-        case orderStatus.Servido: break;
         default: 
           throw(ERROR_TRY_AGAIN);
       }
@@ -69,8 +70,8 @@ export class OrderService {
   async updateStatus(data: {
     orderId: string, 
     action: orderStatus, 
-    notify?: boolean,
-    cancelMotive?: string
+    cancelMotive?: string,
+    notify?: boolean
   }) {
     try {
       const incremental = await this.generalService.getServerIncremental();
