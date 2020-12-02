@@ -1,10 +1,14 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>{{ store.name }}</ion-title>
-    <ion-buttons slot="primary">
+
+    <ion-buttons slot="secondary">
       <ion-button (click)="info()">
         <ion-icon name="information-circle-outline" color="primary"></ion-icon>
       </ion-button>
+    </ion-buttons>
+    
+    <ion-buttons slot="primary">
       <ion-button *ngIf="user.isSuperUser" [routerLink]="[ROUTE_SELECT_STORE]" routerDirection="backward">
         <ion-icon slot="icon-only" name="swap-horizontal-outline" color="primary"></ion-icon>
       </ion-button>
