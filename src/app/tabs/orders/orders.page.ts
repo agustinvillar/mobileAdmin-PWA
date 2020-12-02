@@ -13,6 +13,10 @@ export class OrdersPage {
   collapsed = {};
 
   constructor() {}
+  
+  doRefresh() {
+    window.location.reload();
+  }
 
   segmentChanged(segment): void {
     this.currentSegment = segment.detail.value;

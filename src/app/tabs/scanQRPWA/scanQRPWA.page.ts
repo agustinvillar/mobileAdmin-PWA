@@ -29,6 +29,10 @@ export class ScanQRPWAPage {
   ) 
   { }
 
+  doRefresh() {
+    window.location.reload();
+  }
+
   ngAfterViewInit() {
     this.canvasElement = this.canvas.nativeElement;
     this.canvasContext = this.canvasElement.getContext('2d');
