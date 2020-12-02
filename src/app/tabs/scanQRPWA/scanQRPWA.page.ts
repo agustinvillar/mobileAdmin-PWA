@@ -89,25 +89,30 @@ export class ScanQRPWAPage {
     });
  
     if (code && code.data) {
-      const scanResult: ticketQRCode = JSON.parse(code.data);
-      const store = this.storeService.getCurrentStore();
+      try {
+        const scanResult: ticketQRCode = JSON.parse(code.data);
+        const store = this.storeService.getCurrentStore();
+  
+        if (scanResult.storeId !== store.id || !scanResult.orderId || !scanResult.orderType) {
+          throw('JSON ERROR');
+        }
+        
+        const modal = await this.modalController.create({
+          component: OrderStatusChangePage,
+          componentProps: {
+            orderId: scanResult.orderId,
+            orderType: scanResult.orderType,
+            store: store
+          }
+        });
+        await modal.present();
+        await modal.onWillDismiss();
+        requestAnimationFrame(this.scan.bind(this));
 
-      if (scanResult.storeId !== store.id) {
+      } catch (e) {
         await this.swalService.showGeneric(ERROR_INVALID_QR, 'error');
         return requestAnimationFrame(this.scan.bind(this));
       }
-      
-      const modal = await this.modalController.create({
-        component: OrderStatusChangePage,
-        componentProps: {
-          orderId: scanResult.orderId,
-          orderType: scanResult.orderType,
-          store: store
-        }
-      });
-      await modal.present();
-      await modal.onWillDismiss();
-      requestAnimationFrame(this.scan.bind(this));
 
     } else if (this.scanActive) {
       requestAnimationFrame(this.scan.bind(this));
