@@ -5,10 +5,10 @@
 // import { CustomDate } from "./customDate";
 // import { TableOpeningFamily } from "./tableOpeningFamily";
 // import { Promotions } from "./promotions";
-// import { DaySchedule } from "./daySchedule";
 // import { Market } from "./market";
 // import { OfferCupon } from "./offerCupon";
 
+import { DaySchedule } from './day-schedule';
 import { Extra } from './extra';
 
 export enum PAYMENT_PROVIDER {
@@ -36,7 +36,7 @@ export class Store {
   // customDates?:Array<CustomDate>;
   cutlery?: boolean;
   artisticCutleryFlag?:boolean;
-  // daysSchedule?:Array<DaySchedule>;
+  daysSchedule?:Array<DaySchedule>;
   description?:string;
   disableBookings?: boolean;
   distanceFromUser?: number;

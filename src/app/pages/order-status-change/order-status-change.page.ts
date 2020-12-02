@@ -52,17 +52,16 @@ export class OrderStatusChangePage implements OnInit {
         action,
         cancelMotive: action === orderStatus.Cancelado ? confirm.value : null
       });
-      this.swalService.showNotification('¡Estado actualizado!');
+      this.swalService.showNotification('¡Estado actualizado!');      
+      await this.dismiss();  
       
-      await this.dismiss();
-      await this.loadingService.dismiss();   
-
     } catch (e) {
       if (!e?.keepModal) { 
         this.swalService.showGeneric(ERROR_TRY_AGAIN, 'error'); 
         this.dismiss();
       }
     }
+    this.loadingService.dismiss();   
   }
 
   async checkPreconditions(action: orderStatus) {
@@ -78,15 +77,17 @@ export class OrderStatusChangePage implements OnInit {
         }  
   
       } else if (this.orderType === orderType.TakeAway) {
+        let order: Order;
         switch (action) {
           case orderStatus.Aceptado:
             await this.takeAwayService.canAccept(this.orderId); break;
           case orderStatus.Pronto:
-            const order: Order = await this.orderService.get(this.orderId);
+            order = await this.orderService.get(this.orderId);
             await this.takeAwayService.canPrepare(order);
             break;
           case orderStatus.Cancelado:
-            break;
+            order = await this.orderService.get(this.orderId);
+            await this.takeAwayService.refundTA(this.store, order); break;
           default: break;
         }  
       }

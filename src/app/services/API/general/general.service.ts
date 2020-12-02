@@ -59,6 +59,11 @@ export class GeneralService {
     return this.http.get(url, options).toPromise();
   }
 
+  async getCalculatedTime() {
+    const serverTime = await this.getServerTime();
+    return moment(serverTime, 'YYYY-MM-DD HH:mm:ss');
+  }
+
   async getServerIncremental(): Promise<any> {
     const token = await this.getJsonWebToken();
     if (!token) return;
