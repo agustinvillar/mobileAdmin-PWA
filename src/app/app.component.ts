@@ -4,6 +4,7 @@ import { Platform } from '@ionic/angular';
 import { SplashScreen } from '@ionic-native/splash-screen/ngx';
 import { StatusBar } from '@ionic-native/status-bar/ngx';
 
+import { environment } from 'src/environments/environment';
 import { UpdateService } from './services/update/update.service';
 
 @Component({
@@ -22,7 +23,7 @@ export class AppComponent {
   }
 
   async initializeApp() {
-    this.updateService.checkForUpdates();  
+    if (environment.production) { this.updateService.checkForUpdates(); } 
     await this.platform.ready();
     this.statusBar.styleDefault();
     this.splashScreen.hide();
