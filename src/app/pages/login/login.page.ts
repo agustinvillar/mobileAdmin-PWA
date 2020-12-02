@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { ERROR_LOGIN } from 'src/app/services/errors.service';
-import { MENOO_LOGO, TERMS_AND_CONDITIONS_URL, PRIVACY_POLICY_URL } from 'src/app/services/constants.service';
+import { MENOO_LOGO, DEPLOY_VERSION, TERMS_AND_CONDITIONS_URL, PRIVACY_POLICY_URL } from 'src/app/services/constants.service';
 
 import { AuthService } from 'src/app/services/auth/auth.service';
 import { LoadingService } from 'src/app/services/loading/loading.service';
@@ -16,6 +16,7 @@ import { BrowserService } from 'src/app/services/browser/browser.service';
 })
 export class LoginPage implements OnInit {
   readonly MENOO_LOGO: string = MENOO_LOGO;
+  readonly DEPLOY_VERSION: string = DEPLOY_VERSION;
   credentials: FormGroup;
 
   constructor(

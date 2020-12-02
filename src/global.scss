@@ -36,6 +36,9 @@
 .text-light {
   color: var(--ion-color-medium);
 } 
+.text-small {
+  font-size: small;
+}
 
 //prevent autorotate
 // @media only screen and (min-width: 320px) and (max-width: 890px) and (-webkit-min-device-pixel-ratio: 3) and (orientation: landscape) {

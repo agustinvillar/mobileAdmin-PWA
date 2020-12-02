@@ -3,7 +3,7 @@ import { Component } from '@angular/core';
 import { Store } from '../models/store';
 import { User } from '../models/user';
 
-import { ROUTE_SELECT_STORE, ROUTE_SCAN_QR_PWA, ROUTE_ORDERS } from '../services/constants.service';
+import { ROUTE_SELECT_STORE, ROUTE_SCAN_QR_PWA, ROUTE_ORDERS, DEPLOY_VERSION } from '../services/constants.service';
 import { AuthService } from '../services/auth/auth.service';
 import { StoreService } from '../services/store/store.service';
 import { SwalService } from '../services/swal/swal.service';
@@ -35,5 +35,9 @@ export class TabsPage {
   async logout() {
     const res = await this.swalService.showConfirm('¿Seguro que desea cerrar sesión?');
     if (res.isConfirmed) this.authService.logout();
+  }
+
+  info() {
+    this.swalService.showGeneric(`Menoo Admin <br> v${DEPLOY_VERSION}`, 'info'); 
   }
 }

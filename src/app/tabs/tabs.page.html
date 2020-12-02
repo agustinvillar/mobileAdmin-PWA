@@ -2,10 +2,13 @@
   <ion-toolbar>
     <ion-title>{{ store.name }}</ion-title>
     <ion-buttons slot="primary">
-      <ion-button *ngIf="user.isSuperUser" color="secondary" [routerLink]="[ROUTE_SELECT_STORE]" routerDirection="backward">
+      <ion-button (click)="info()">
+        <ion-icon name="information-circle-outline" color="primary"></ion-icon>
+      </ion-button>
+      <ion-button *ngIf="user.isSuperUser" [routerLink]="[ROUTE_SELECT_STORE]" routerDirection="backward">
         <ion-icon slot="icon-only" name="swap-horizontal-outline" color="primary"></ion-icon>
       </ion-button>
-      <ion-button color="secondary" (click)="logout()">
+      <ion-button (click)="logout()">
         <ion-icon slot="icon-only" name="log-out-outline" color="primary"></ion-icon>
       </ion-button>
     </ion-buttons>

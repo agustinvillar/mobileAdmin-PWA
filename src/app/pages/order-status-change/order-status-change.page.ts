@@ -69,22 +69,26 @@ export class OrderStatusChangePage implements OnInit {
     try {
       if (this.orderType === orderType.Reserva) {
         const order: Order = await this.orderService.get(this.orderId);
-  
-        if (action === orderStatus.Servido) {
-          await this.bookingService.canServe(order);
-        } else if (action === orderStatus.Cancelado) {
-          await this.bookingService.refundBooking(order);
-        }      
+        switch (action) {
+          case orderStatus.Servido:
+            await this.bookingService.canServe(order); break;
+          case orderStatus.Cancelado:
+            await this.bookingService.refundBooking(order); break;
+          default: break;
+        }  
   
       } else if (this.orderType === orderType.TakeAway) {
-        if (action === orderStatus.Aceptado) {
-          await this.takeAwayService.canAccept(this.orderId);
-        } else if (action === orderStatus.Pronto) {
-          const order: Order = await this.orderService.get(this.orderId);
-          await this.takeAwayService.canPrepare(order);
-        } else if (action === orderStatus.Cancelado) {
-  
-        }
+        switch (action) {
+          case orderStatus.Aceptado:
+            await this.takeAwayService.canAccept(this.orderId); break;
+          case orderStatus.Pronto:
+            const order: Order = await this.orderService.get(this.orderId);
+            await this.takeAwayService.canPrepare(order);
+            break;
+          case orderStatus.Cancelado:
+            break;
+          default: break;
+        }  
       }
 
     } catch (e) {

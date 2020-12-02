@@ -1,3 +1,5 @@
+export const DEPLOY_VERSION = '0.0.1';
+
 //STORAGE KEYS
 export const STORAGE_TOKEN_KEY = 'token';
 export const STORAGE_STORE_ID_KEY = 'storeId';

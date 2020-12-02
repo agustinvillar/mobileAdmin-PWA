@@ -16,6 +16,9 @@ ion-grid {
     flex: 1;
     align-content: flex-start;
 
+    ion-item {
+      --padding-start: 0;
+    }
     .errors {
       margin-top: 0.4rem;
       font-size: 0.8rem;
