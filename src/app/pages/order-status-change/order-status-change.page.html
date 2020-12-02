@@ -59,7 +59,7 @@
   <ion-toolbar>
     <ion-row class="buttons-row">
       <ion-col *ngFor="let action of orderData?.actions" size="12">
-        <ion-button expand="block" color="{{ action }}" (click)="updateStatus(action)">
+        <ion-button expand="block" color="{{ action }}" (click)="updateStatus(orderData?.order.status, action)">
           {{ action.toUpperCase() }}
         </ion-button>
       </ion-col>

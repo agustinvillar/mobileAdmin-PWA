@@ -5,7 +5,7 @@ import { cancelSource, orderStatus } from 'src/app/models/enums';
 import { Order } from 'src/app/models/order';
 import { Store } from 'src/app/models/store';
 
-import { ERROR_INVALID_QR, ERROR_TRY_AGAIN } from 'src/app/services/errors.service';
+import { ERROR_INVALID_QR, ERROR_STATUS_CHANGED, ERROR_TRY_AGAIN } from 'src/app/services/errors.service';
 import { GeneralService } from 'src/app/services/API/general/general.service';
 import { NotificationService } from 'src/app/services/notification/notification.service';
 import { SwalService } from 'src/app/services/swal/swal.service';
@@ -68,42 +68,50 @@ export class OrderService {
   }
 
   async updateStatus(data: {
-    orderId: string, 
-    action: orderStatus, 
-    cancelMotive?: string,
-    notify?: boolean
+    order: Order, 
+    originalStatus: orderStatus, 
+    newStatus: orderStatus, 
+    cancelMotive?: string
   }) {
-    try {
-      const incremental = await this.generalService.getServerIncremental();
-      if (!incremental) return Promise.reject();
+    try {      
+      const docRefOrder = this.afs.firestore.collection('orders').doc(data.order.id);  
       
-      await this.afs.doc<Order>('orders/' + data.orderId).update({
-        status: data.action,
-        cancelMotive: data.cancelMotive || null,
-        cancelSource: data.cancelMotive ? cancelSource.restaurant : null,
-        updatedAt: incremental
+      await this.afs.firestore.runTransaction(async t => {
+        const docOrder = await t.get(docRefOrder);
+        const order = docOrder.data();
+        if (order.status !== data.originalStatus) { 
+          await this.swalService.showGeneric(ERROR_STATUS_CHANGED, 'error');
+          throw { errorShown: true };
+        }
+
+        const incremental = await this.generalService.getServerIncremental();
+        if (!incremental) throw '';
+
+        await t.update(docOrder.ref, { 
+          status: data.newStatus,
+          cancelMotive: data.cancelMotive || null,
+          cancelSource: data.cancelMotive ? cancelSource.restaurant : null,
+          updatedAt: incremental
+        });
       });
       
-      if (data.notify !== false) {
-        const order = await this.get(data.orderId);
-        const notificationsText = this.getNotificationsText({
-          order, 
-          status: data.action,
-          estimatedTime: order.estimatedTimeTA || ''
-        });
+      const notificationsText = this.getNotificationsText({
+        order: data.order, 
+        status: data.newStatus,
+        estimatedTime: data.order.estimatedTimeTA || ''
+      });
 
-        this.notificationService.sendPush({ 
-          title: notificationsText.push.title, 
-          content: notificationsText.push.text, 
-          userId: order.userId 
-        });
-        
-        this.notificationService.sendApp({
-          msg: notificationsText.app.text,
-          userId: order.userId,
-          redirectTo: ORDERS_MOBILE_PAGE
-        });
-      }
+      this.notificationService.sendPush({ 
+        title: notificationsText.push.title, 
+        content: notificationsText.push.text, 
+        userId: data.order.userId 
+      });
+      
+      this.notificationService.sendApp({
+        msg: notificationsText.app.text,
+        userId: data.order.userId,
+        redirectTo: ORDERS_MOBILE_PAGE
+      });
     } catch (e) {
       const error: ErrorLog = {
         error: JSON.stringify(e),
@@ -115,6 +123,7 @@ export class OrderService {
       this.logService.addError(error);
       this.logService.logErrors(error);
       this.logService.sendErrorViaEmail(error);
+      throw(e);
     }
   }
 

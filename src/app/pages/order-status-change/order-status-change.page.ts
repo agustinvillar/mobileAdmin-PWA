@@ -31,11 +31,15 @@ export class OrderStatusChangePage implements OnInit {
 
   async ngOnInit() {
     await this.loadingService.present();
-    this.orderData = await this.orderService.getActions(this.orderId, this.store);
+    await this.getOrderData();
     this.loadingService.dismiss();
   }
 
-  async updateStatus(action: orderStatus) {
+  async getOrderData() {
+    this.orderData = await this.orderService.getActions(this.orderId, this.store);
+  }
+
+  async updateStatus(status: orderStatus, action: orderStatus) {
     try {
       const confirm = await this.swalService.showStatusChangeConfirm(action);
       if (!confirm.isConfirmed) return;
@@ -43,31 +47,33 @@ export class OrderStatusChangePage implements OnInit {
       if (action === orderStatus.Cancelado && !confirm.value) { 
         return this.swalService.showGeneric(ERROR_INVALID_CANCEL_MSG, 'error');
       }
-  
+      
       await this.loadingService.present();
-      await this.checkPreconditions(action);
+
+      const order: Order = await this.orderService.get(this.orderId);
+      await this.checkPreconditions(order, action);
 
       await this.orderService.updateStatus({ 
-        orderId: this.orderId, 
-        action,
+        order, 
+        originalStatus: status,
+        newStatus: action,
         cancelMotive: action === orderStatus.Cancelado ? confirm.value : null
       });
+      
       this.swalService.showNotification('¡Estado actualizado!');      
       await this.dismiss();  
       
     } catch (e) {
-      if (!e?.keepModal) { 
-        this.swalService.showGeneric(ERROR_TRY_AGAIN, 'error'); 
-        this.dismiss();
-      }
+      if (!e?.errorShown) { this.swalService.showGeneric(ERROR_TRY_AGAIN, 'error'); }
+      await this.getOrderData();
     }
+
     this.loadingService.dismiss();   
   }
 
-  async checkPreconditions(action: orderStatus) {
+  async checkPreconditions(order: Order, action: orderStatus) {
     try {
       if (this.orderType === orderType.Reserva) {
-        const order: Order = await this.orderService.get(this.orderId);
         switch (action) {
           case orderStatus.Servido:
             await this.bookingService.canServe(order); break;
@@ -77,16 +83,12 @@ export class OrderStatusChangePage implements OnInit {
         }  
   
       } else if (this.orderType === orderType.TakeAway) {
-        let order: Order;
         switch (action) {
           case orderStatus.Aceptado:
             await this.takeAwayService.canAccept(this.orderId); break;
           case orderStatus.Pronto:
-            order = await this.orderService.get(this.orderId);
-            await this.takeAwayService.canPrepare(order);
-            break;
+            await this.takeAwayService.canPrepare(order); break;
           case orderStatus.Cancelado:
-            order = await this.orderService.get(this.orderId);
             await this.takeAwayService.refundTA(this.store, order); break;
           default: break;
         }  
@@ -94,7 +96,7 @@ export class OrderStatusChangePage implements OnInit {
 
     } catch (e) {
       this.swalService.showGeneric(e, 'error');
-      throw { keepModal: true };
+      throw { errorShown: true };
     }
   }
 
