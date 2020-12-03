@@ -4,7 +4,7 @@ import { AngularFireAuth } from "@angular/fire/auth";
 import { take } from 'rxjs/internal/operators/take';
 import { Observable } from 'rxjs';
 
-import { typeOfRestaurant, userType } from 'src/app/models/enums';
+import { orderType, typeOfRestaurant, userType } from 'src/app/models/enums';
 import { User } from 'src/app/models/user';
 import { SwalService } from 'src/app/services/swal/swal.service';
 import { Store } from 'src/app/models/store';
@@ -54,5 +54,20 @@ export class UserService {
         return hasTA ? typeOfRestaurant.allButBook : typeOfRestaurant.onlyTo;
       }
     } 
+  }
+
+  checkOrderTypePermission(store: Store, type: orderType): boolean {
+    switch (this.getRestaurantType(store)) {
+      case typeOfRestaurant.onlyTo:
+        return type === orderType.Mesa;
+      case typeOfRestaurant.onlyTa:
+        return type === orderType.TakeAway;
+      case typeOfRestaurant.allButTa:
+        return [ orderType.Mesa, orderType.Reserva ].includes(type);
+      case typeOfRestaurant.allButBook:
+        return [ orderType.Mesa, orderType.TakeAway ].includes(type);    
+      default:
+        return true;
+    }
   }
 }

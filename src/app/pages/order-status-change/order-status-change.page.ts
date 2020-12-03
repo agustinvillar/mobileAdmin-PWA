@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ModalController } from '@ionic/angular';
 import { orderStatus, orderType } from 'src/app/models/enums';
 
-import { ERROR_TRY_AGAIN, ERROR_INVALID_CANCEL_MSG } from 'src/app/services/errors.service';
+import { ERROR_TRY_AGAIN, ERROR_INVALID_CANCEL_MSG, ORDER_ACCESS_DENIED } from 'src/app/services/errors.service';
 import { Order } from 'src/app/models/order';
 import { Store } from 'src/app/models/store';
 
@@ -11,6 +11,7 @@ import { OrderService } from 'src/app/services/order/order.service';
 import { SwalService } from 'src/app/services/swal/swal.service';
 import { BookingService } from 'src/app/services/booking/booking.service';
 import { TakeAwayService } from 'src/app/services/takeAway/take-away.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-order-status-change',
@@ -26,12 +27,20 @@ export class OrderStatusChangePage implements OnInit {
   constructor(
     public modalController: ModalController, private orderService: OrderService, 
     private bookingService: BookingService, private takeAwayService: TakeAwayService, 
-    public loadingService: LoadingService, public swalService: SwalService
+    private userService: UserService, public loadingService: LoadingService, 
+    public swalService: SwalService
   ) { }
 
   async ngOnInit() {
     await this.loadingService.present();
-    await this.getOrderData();
+
+    if (this.userService.checkOrderTypePermission(this.store, this.orderType)) {
+      await this.getOrderData();
+    } else {
+      await this.swalService.showGeneric(ORDER_ACCESS_DENIED, 'error');
+      await this.dismiss();
+    }
+
     this.loadingService.dismiss();
   }
 

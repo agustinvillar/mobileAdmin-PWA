@@ -24,8 +24,8 @@ export class ScanQRPWAPage {
   scanActive: boolean = true;
   
   constructor(
-    public storeService: StoreService, public swalService: SwalService, public loadingService: LoadingService,
-    public modalController: ModalController
+    public storeService: StoreService, public swalService: SwalService, 
+    public loadingService: LoadingService, public modalController: ModalController
   ) 
   { }
 
@@ -110,7 +110,7 @@ export class ScanQRPWAPage {
           }
         });
         await modal.present();
-        await modal.onWillDismiss();
+        await modal.onDidDismiss();
         requestAnimationFrame(this.scan.bind(this));
 
       } catch (e) {
