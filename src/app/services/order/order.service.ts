@@ -1,7 +1,9 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
+import { BehaviorSubject, Subscription } from 'rxjs';
+import { map } from 'rxjs/internal/operators/map';
 
-import { cancelSource, orderStatus } from 'src/app/models/enums';
+import { cancelSource, orderStatus, orderType } from 'src/app/models/enums';
 import { Order } from 'src/app/models/order';
 import { Store } from 'src/app/models/store';
 
@@ -13,20 +15,97 @@ import { ErrorLog } from 'src/app/models/errorLog';
 import { LogService } from '../log/log.service';
 
 const ORDERS_MOBILE_PAGE = 'orders';
+const SHIFT_PERIOD_HOURS = 12;
+const TA_START_PERIOD_HOURS = 4;
 
 @Injectable({
   providedIn: 'root'
 })
 export class OrderService {
+  private orderSubjectsSubsciptions: Subscription[] = [];
+  public tableOrdersSubject: BehaviorSubject<Array<Order>> = new BehaviorSubject<Array<Order>>([]);
+  public takeAwayOrdersSubject: BehaviorSubject<Array<Order>> = new BehaviorSubject<Array<Order>>([]);
+  public bookingOrdersSubject: BehaviorSubject<Array<Order>> = new BehaviorSubject<Array<Order>>([]);
+  calculatedTime;
 
   constructor(
     private afs: AngularFirestore, private generalService: GeneralService, private logService: LogService,
     private notificationService: NotificationService, public swalService: SwalService
   ) { }
 
+  async initOrderListeners(storeId: string, orderTypes: orderType[]) {
+    this.resetOrdersSubjects();        
+    this.calculatedTime = await this.generalService.getCalculatedTime();
+
+    if (orderTypes.includes(orderType.Mesa)) {
+      let sub = this.getTableOrdersForDate(storeId, orderType.Mesa).subscribe(orders => 
+        this.tableOrdersSubject.next(orders)
+      );
+      this.orderSubjectsSubsciptions.push(sub);
+    }
+
+    if (orderTypes.includes(orderType.TakeAway)) {
+      let sub = this.getTakeAwayOrders(storeId).subscribe(orders => 
+        this.takeAwayOrdersSubject.next(orders)
+      );
+      this.orderSubjectsSubsciptions.push(sub);
+    }
+
+    if (orderTypes.includes(orderType.Reserva)) {
+      let sub = this.getTableOrdersForDate(storeId, orderType.Reserva).subscribe(orders => 
+        this.bookingOrdersSubject.next(orders)
+      );
+      this.orderSubjectsSubsciptions.push(sub);
+    }
+  }
+
+  resetOrdersSubjects() {
+    this.orderSubjectsSubsciptions.forEach(sub => { if (sub) sub.unsubscribe(); });
+    this.orderSubjectsSubsciptions = [];
+    this.tableOrdersSubject.next([]);
+    this.takeAwayOrdersSubject.next([]);
+    this.bookingOrdersSubject.next([]);
+  }
+
   async get(orderId: string): Promise<Order> {
     const doc = await this.afs.collection<Order>('orders').doc(orderId).ref.get();
     return <Order>doc.data();
+  }
+
+  getTableOrdersForDate(storeId: string, type: orderType) {
+    const startTime = this.calculatedTime.subtract(SHIFT_PERIOD_HOURS, 'hours').format('YYYY-MM-DD HH:mm');
+    const endTime = this.calculatedTime.add(SHIFT_PERIOD_HOURS, 'hours').format('YYYY-MM-DD HH:mm');
+
+    return this.afs.collection<Order>('orders', ref => 
+      ref.where('store.id', '==', storeId)
+        .where('orderType', "==", type)
+        .where('orderDate', ">=", startTime)
+        .where('orderDate', "<", endTime)
+        .orderBy('orderDate', 'asc')
+    ).snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Order;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      });
+    }));
+  }
+
+  getTakeAwayOrders(storeId: string) {
+    const startTime = this.calculatedTime.subtract(TA_START_PERIOD_HOURS, 'hours').format('YYYY-MM-DD HH:mm');
+
+    return this.afs.collection<Order>('orders', ref => 
+      ref.where('store.id', '==', storeId)
+        .where('orderType', "==", orderType.TakeAway)
+        .where('orderDate', ">=", startTime)
+        .orderBy('orderDate', 'asc')
+    ).snapshotChanges().pipe(map(actions => {
+      return actions.map(a => {
+        const data = a.payload.doc.data() as Order;
+        const id = a.payload.doc.id;
+        return { id, ...data };
+      });
+    }));
   }
 
   async getActions(orderId: string, store: Store) {

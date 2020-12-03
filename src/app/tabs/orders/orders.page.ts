@@ -1,5 +1,13 @@
 import { Component } from '@angular/core';
+import { ModalController } from '@ionic/angular';
+
 import { orderStatus, orderType, typeOfRestaurant } from 'src/app/models/enums';
+import { Order } from 'src/app/models/order';
+import { Store } from 'src/app/models/store';
+import { OrderStatusChangePage } from 'src/app/pages/order-status-change/order-status-change.page';
+
+import { LoadingService } from 'src/app/services/loading/loading.service';
+import { OrderService } from 'src/app/services/order/order.service';
 import { StoreService } from 'src/app/services/store/store.service';
 import { UserService } from 'src/app/services/user/user.service';
 
@@ -9,17 +17,27 @@ import { UserService } from 'src/app/services/user/user.service';
   styleUrls: ['orders.page.scss']
 })
 export class OrdersPage {
+  store: Store;
   orderTypes = orderType;
   status = orderStatus;
 
-  currentSegment: orderType;
   segments: orderType[];
+  currentSegment: orderType;
+  currentSegmentStatus: orderStatus[] = [];
   collapsed = {};
 
+  tableOrders: Array<Order>;
+  takeAwayOrders: Array<Order>;
+  bookingOrders: Array<Order>;
+  segmentOrders: Array<Order>;
+
   constructor(
-    private storeService: StoreService, private userService: UserService
-  ) {
-    const restaurantType = this.userService.getRestaurantType(this.storeService.getCurrentStore());
+    private orderService: OrderService, private storeService: StoreService, 
+    private userService: UserService, public modalController: ModalController,
+    public loadingService: LoadingService
+  ) {    
+    this.store = this.storeService.getCurrentStore();
+    const restaurantType = this.userService.getRestaurantType(this.store);
     this.currentSegment = orderType.Mesa;
     
     switch (restaurantType) {
@@ -35,18 +53,74 @@ export class OrdersPage {
         this.segments = [ orderType.Mesa, orderType.TakeAway ]; break;
       default: 
         this.segments = [ orderType.Mesa, orderType.TakeAway, orderType.Reserva ]; break;
-    }    
+    }        
+  }
+
+  async ionViewWillEnter() {
+    await this.loadingService.present();
+    await this.orderService.initOrderListeners(this.store.id, this.segments);
+
+    this.orderService.tableOrdersSubject.subscribe(orders => {
+      this.tableOrders = orders.filter(o => {
+        return !o.closed;
+      });
+      this.setOrders();
+    });
+
+    this.orderService.takeAwayOrdersSubject.subscribe(orders => {
+      this.takeAwayOrders = orders;
+      this.setOrders();
+    });
+
+    this.orderService.bookingOrdersSubject.subscribe(orders => {
+      this.bookingOrders = orders;
+      this.setOrders();
+    });
+    
+    this.loadingService.dismiss();
   }
   
   doRefresh() {
     window.location.reload();
   }
 
+  setOrders() {
+    switch (this.currentSegment) {
+      case orderType.Mesa:
+        this.segmentOrders = this.tableOrders; 
+        this.currentSegmentStatus = [ orderStatus.Preparando, orderStatus.Servido, orderStatus.Cancelado ];
+        break;
+      case orderType.TakeAway:
+        this.segmentOrders = this.takeAwayOrders; 
+        this.currentSegmentStatus = [ orderStatus.Pendiente, orderStatus.Aceptado, orderStatus.Pronto, orderStatus.Cancelado ];
+        break;
+      case orderType.Reserva:
+        this.segmentOrders = this.bookingOrders; 
+        this.currentSegmentStatus = [ orderStatus.Preparando, orderStatus.Servido, orderStatus.Cancelado ];
+        break;
+      default: 
+        break;
+    }  
+  }
+
   segmentChanged(segment): void {
     this.currentSegment = segment.detail.value;
+    this.setOrders();
   }
 
   toggleList(status: orderStatus): void {
     this.collapsed[status] = !this.collapsed[status];
+  }
+
+  async showOrder(order: Order) {
+    const modal = await this.modalController.create({
+      component: OrderStatusChangePage,
+      componentProps: {
+        orderId: order.id,
+        orderType: order.orderType,
+        store: this.store
+      }
+    });
+    await modal.present();
   }
 }

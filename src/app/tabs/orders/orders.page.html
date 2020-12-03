@@ -14,101 +14,32 @@
   </ion-segment>
 
   <ion-list mode="md">
-    <div *ngIf="[orderTypes.Mesa, orderTypes.Reserva].includes(currentSegment)">
-      <ion-item-group>
-        <ion-item-divider color="{{ status.Preparando }}" (click)="toggleList(status.Preparando)">
-          <ion-label>Preparando</ion-label>
-          <ion-icon *ngIf="collapsed[status.Preparando]" name="chevron-down-outline" slot="end"></ion-icon>
-          <ion-icon *ngIf="!collapsed[status.Preparando]" name="chevron-up-outline" slot="end"></ion-icon>
-        </ion-item-divider>
-      
-        <div *ngIf="!collapsed[status.Preparando]">
-          <ion-item>
-            <ion-label>Orden</ion-label>
-          </ion-item>
-        </div>
-      </ion-item-group>
-
-      <ion-item-group>
-        <ion-item-divider color="{{ status.Servido }}" (click)="toggleList(status.Servido)">
-          <ion-label>Servido</ion-label>
-          <ion-icon *ngIf="collapsed[status.Servido]" name="chevron-down-outline" slot="end"></ion-icon>
-          <ion-icon *ngIf="!collapsed[status.Servido]" name="chevron-up-outline" slot="end"></ion-icon>
-        </ion-item-divider>
-      
-        <div *ngIf="!collapsed[status.Servido]">
-          <ion-item>
-            <ion-label>Orden</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>Orden</ion-label>
-          </ion-item>
-        </div>
-      </ion-item-group>
-    </div>
-
-    <div *ngIf="currentSegment === orderTypes.TakeAway">
-      <ion-item-group>
-        <ion-item-divider color="{{ status.Pendiente }}" (click)="toggleList(status.Pendiente)">
-          <ion-label>Pendiente</ion-label>
-          <ion-icon *ngIf="collapsed[status.Pendiente]" name="chevron-down-outline" slot="end"></ion-icon>
-          <ion-icon *ngIf="!collapsed[status.Pendiente]" name="chevron-up-outline" slot="end"></ion-icon>
-        </ion-item-divider>
-      
-        <div *ngIf="!collapsed[status.Pendiente]">
-          <ion-item>
-            <ion-label>Orden</ion-label>
-          </ion-item>
-        </div>
-      </ion-item-group>
-
-      <ion-item-group>
-        <ion-item-divider color="{{ status.Aceptado }}" (click)="toggleList(status.Aceptado)">
-          <ion-label>Aceptado</ion-label>
-          <ion-icon *ngIf="collapsed[status.Aceptado]" name="chevron-down-outline" slot="end"></ion-icon>
-          <ion-icon *ngIf="!collapsed[status.Aceptado]" name="chevron-up-outline" slot="end"></ion-icon>
-        </ion-item-divider>
-      
-        <div *ngIf="!collapsed[status.Aceptado]">
-          <ion-item>
-            <ion-label>Orden</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>Orden</ion-label>
-          </ion-item>
-        </div>
-      </ion-item-group>
-
-      <ion-item-group>
-        <ion-item-divider color="{{ status.Pronto }}" (click)="toggleList(status.Pronto)">
-          <ion-label>Pronto</ion-label>
-          <ion-icon *ngIf="collapsed[status.Pronto]" name="chevron-down-outline" slot="end"></ion-icon>
-          <ion-icon *ngIf="!collapsed[status.Pronto]" name="chevron-up-outline" slot="end"></ion-icon>
-        </ion-item-divider>
-      
-        <div *ngIf="!collapsed[status.Pronto]">
-          <ion-item>
-            <ion-label>Orden</ion-label>
-          </ion-item>
-          <ion-item>
-            <ion-label>Orden</ion-label>
-          </ion-item>
-        </div>
-      </ion-item-group>
-    </div>
-
-    <ion-item-group>
-      <ion-item-divider color="{{ status.Cancelado }}" (click)="toggleList(status.Cancelado)">
-        <ion-label>Cancelado</ion-label>
-        <ion-icon *ngIf="collapsed[status.Cancelado]" name="chevron-down-outline" slot="end"></ion-icon>
-        <ion-icon *ngIf="!collapsed[status.Cancelado]" name="chevron-up-outline" slot="end"></ion-icon>
+    
+    <ion-item-group *ngFor="let group of currentSegmentStatus">
+      <ion-item-divider color="{{ group }}" (click)="toggleList(group)">
+        <ion-label>{{ group }}</ion-label>
+        <ion-icon *ngIf="collapsed[group]" name="chevron-down-outline" slot="end"></ion-icon>
+        <ion-icon *ngIf="!collapsed[group]" name="chevron-up-outline" slot="end"></ion-icon>
       </ion-item-divider>
     
-      <div *ngIf="!collapsed[status.Cancelado]">
-        <ion-item>
-          <ion-label>Orden</ion-label>
-        </ion-item>
+      <div *ngIf="!collapsed[group]">
+        <div *ngFor="let order of segmentOrders">
+          <ion-item *ngIf="order.status === group" (click)="showOrder(order)">
+            <ion-label>
+              <ion-row>
+                <ion-col>
+                  # {{ order.orderNumber }}
+                  <span *ngIf="order.userName"> - {{ order.userName }}</span>                          
+                </ion-col>
+                <ion-col class="ion-text-end">
+                  <span>{{ order.orderDate | date: "HH:mm" }}</span>              
+                </ion-col>
+              </ion-row>
+            </ion-label>
+          </ion-item>
+        </div>
       </div>
     </ion-item-group>
+
   </ion-list>
 </ion-content>
