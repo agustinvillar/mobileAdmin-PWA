@@ -1,5 +1,7 @@
 import { Component } from '@angular/core';
 import { orderStatus, orderType, typeOfRestaurant } from 'src/app/models/enums';
+import { StoreService } from 'src/app/services/store/store.service';
+import { UserService } from 'src/app/services/user/user.service';
 
 @Component({
   selector: 'app-orders',
@@ -12,13 +14,15 @@ export class OrdersPage {
 
   currentSegment: orderType;
   segments: orderType[];
-  typeOfRestaurant: typeOfRestaurant;
   collapsed = {};
 
-  constructor() {          
+  constructor(
+    private storeService: StoreService, private userService: UserService
+  ) {
+    const restaurantType = this.userService.getRestaurantType(this.storeService.getCurrentStore());
     this.currentSegment = orderType.Mesa;
-
-    switch (this.typeOfRestaurant) {
+    
+    switch (restaurantType) {
       case typeOfRestaurant.onlyTa:        
         this.segments = [ orderType.TakeAway ];
         this.currentSegment = orderType.TakeAway;

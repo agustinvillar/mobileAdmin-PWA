@@ -5,11 +5,11 @@
 // import { CustomDate } from "./customDate";
 // import { TableOpeningFamily } from "./tableOpeningFamily";
 // import { Promotions } from "./promotions";
-// import { Market } from "./market";
 // import { OfferCupon } from "./offerCupon";
 
 import { DaySchedule } from './day-schedule';
 import { Extra } from './extra';
+import { Market } from './market';
 
 export enum PAYMENT_PROVIDER {
   NONE = 0, MERCADO_PAGO = 1, GEOPAY = 2
@@ -85,8 +85,8 @@ export class Store {
   updatedAt?: number;
   merchantId? : string;
   paymentProvider? : PAYMENT_PROVIDER;
-  isMarket?:boolean;
-  // market?:Market;
+  isMarket?: boolean;
+  market?: Market;
   takeAwayQR?:string;
   takeAwayCode?:string;
   IMMAuthorization?: string;

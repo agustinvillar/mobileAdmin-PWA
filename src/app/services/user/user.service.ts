@@ -3,8 +3,11 @@ import { AngularFirestore } from '@angular/fire/firestore';
 import { AngularFireAuth } from "@angular/fire/auth";
 import { take } from 'rxjs/internal/operators/take';
 import { Observable } from 'rxjs';
-import { SwalService } from '../swal/swal.service';
+
+import { typeOfRestaurant, userType } from 'src/app/models/enums';
 import { User } from 'src/app/models/user';
+import { SwalService } from 'src/app/services/swal/swal.service';
+import { Store } from 'src/app/models/store';
 
 @Injectable({
   providedIn: 'root'
@@ -31,5 +34,25 @@ export class UserService {
     const user = await this.getCurrent(authData.uid).pipe(take(1)).toPromise();
     this.setCurrentUser(user);
     return user;
+  }
+
+  getRestaurantType(store: Store): typeOfRestaurant {
+    if (this.currentUser.isSuperUser) { return typeOfRestaurant.all; }
+
+    const isResto = store.isResto;
+    const hasBookings = !store.disableBookings;
+    const hasTA = store.isTakeAway || (store.isMarket && store.market);
+
+    if (this.currentUser.userType === userType.waiter) {
+      return typeOfRestaurant.onlyTo;
+    } else if (!isResto) {
+      return typeOfRestaurant.onlyTa;
+    } else {
+      if (hasBookings) {
+        return hasTA ? typeOfRestaurant.all : typeOfRestaurant.allButTa;
+      } else {
+        return hasTA ? typeOfRestaurant.allButBook : typeOfRestaurant.onlyTo;
+      }
+    } 
   }
 }
