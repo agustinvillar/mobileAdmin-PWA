@@ -7,20 +7,14 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-  <ion-segment mode="md" (ionChange)="segmentChanged($event)" value="{{ segments.Mesa }}">
-    <ion-segment-button value="{{ segments.Mesa }}">
-      <ion-label>{{ segments.Mesa }}</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="{{ segments.TakeAway }}">
-      <ion-label>{{ segments.TakeAway }}</ion-label>
-    </ion-segment-button>
-    <ion-segment-button value="{{ segments.Reserva }}">
-      <ion-label>{{ segments.Reserva }}</ion-label>
+  <ion-segment mode="md" (ionChange)="segmentChanged($event)" value="{{ currentSegment }}">
+    <ion-segment-button *ngFor="let segment of segments" value="{{ segment }}">
+      <ion-label>{{ segment }}</ion-label>
     </ion-segment-button>
   </ion-segment>
 
   <ion-list mode="md">
-    <div *ngIf="[segments.Mesa, segments.Reserva].includes(currentSegment)">
+    <div *ngIf="[orderTypes.Mesa, orderTypes.Reserva].includes(currentSegment)">
       <ion-item-group>
         <ion-item-divider color="{{ status.Preparando }}" (click)="toggleList(status.Preparando)">
           <ion-label>Preparando</ion-label>
@@ -53,7 +47,7 @@
       </ion-item-group>
     </div>
 
-    <div *ngIf="currentSegment === segments.TakeAway">
+    <div *ngIf="currentSegment === orderTypes.TakeAway">
       <ion-item-group>
         <ion-item-divider color="{{ status.Pendiente }}" (click)="toggleList(status.Pendiente)">
           <ion-label>Pendiente</ion-label>

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { orderStatus, orderType } from 'src/app/models/enums';
+import { orderStatus, orderType, typeOfRestaurant } from 'src/app/models/enums';
 
 @Component({
   selector: 'app-orders',
@@ -7,12 +7,32 @@ import { orderStatus, orderType } from 'src/app/models/enums';
   styleUrls: ['orders.page.scss']
 })
 export class OrdersPage {
-  segments = orderType;
+  orderTypes = orderType;
   status = orderStatus;
-  currentSegment: orderType = orderType.Mesa;
+
+  currentSegment: orderType;
+  segments: orderType[];
+  typeOfRestaurant: typeOfRestaurant;
   collapsed = {};
 
-  constructor() {}
+  constructor() {          
+    this.currentSegment = orderType.Mesa;
+
+    switch (this.typeOfRestaurant) {
+      case typeOfRestaurant.onlyTa:        
+        this.segments = [ orderType.TakeAway ];
+        this.currentSegment = orderType.TakeAway;
+        break;
+      case typeOfRestaurant.onlyTo:        
+        this.segments = [ orderType.Mesa ]; break;
+      case typeOfRestaurant.allButTa:        
+        this.segments = [ orderType.Mesa, orderType.Reserva ]; break;
+      case typeOfRestaurant.allButBook:        
+        this.segments = [ orderType.Mesa, orderType.TakeAway ]; break;
+      default: 
+        this.segments = [ orderType.Mesa, orderType.TakeAway, orderType.Reserva ]; break;
+    }    
+  }
   
   doRefresh() {
     window.location.reload();

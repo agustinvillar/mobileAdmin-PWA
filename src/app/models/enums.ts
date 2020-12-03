@@ -25,6 +25,14 @@ export enum orderType {
   Mesa = "Mesas"
 }
 
+export enum typeOfRestaurant {
+  all = 'all',
+  onlyTa = 'onlyTa',
+  allButTa = 'allButTa',
+  allButBook = 'allButBook',
+  onlyTo = 'onlyTo',
+}
+
 export enum userType {
   cahseer = 'Cajero',
   waiter = 'Mozo',
