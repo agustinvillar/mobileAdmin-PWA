@@ -1,4 +1,4 @@
-export const DEPLOY_VERSION = '0.1.5';
+export const DEPLOY_VERSION = '0.1.6';
 
 //STORAGE KEYS
 export const STORAGE_TOKEN_KEY = 'token';

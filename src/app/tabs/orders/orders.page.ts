@@ -103,11 +103,9 @@ export class OrdersPage {
     }  
   }
 
-  async segmentChanged(segment): Promise<void> {
-    await this.loadingService.present();
+  segmentChanged(segment): void {
     this.currentSegment = segment.detail.value;
     this.setOrders();
-    this.loadingService.dismiss();
   }
 
   toggleList(status: orderStatus): void {

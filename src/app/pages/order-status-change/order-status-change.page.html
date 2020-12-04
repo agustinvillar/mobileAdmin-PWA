@@ -62,7 +62,7 @@
   </ion-grid>
 </ion-content>
 
-<ion-footer>
+<ion-footer *ngIf="orderData?.actions">
   <ion-toolbar>
     <ion-row class="buttons-row">
       <ion-col *ngFor="let action of orderData?.actions" size="12">

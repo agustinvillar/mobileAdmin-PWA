@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { BehaviorSubject, Subscription } from 'rxjs';
+import { mergeMap } from 'rxjs/internal/operators/mergeMap';
 import { map } from 'rxjs/internal/operators/map';
 
 import { cancelSource, orderStatus, orderType } from 'src/app/models/enums';
@@ -45,8 +46,8 @@ export class OrderService {
     }
 
     if (orderTypes.includes(orderType.TakeAway)) {
-      let sub = this.getTakeAwayOrders(storeId).subscribe(orders => 
-        this.takeAwayOrdersSubject.next(orders)
+      let sub = this.getTakeAwayOrders(storeId).subscribe(orders =>
+        this.takeAwayOrdersSubject.next(orders)      
       );
       this.orderSubjectsSubsciptions.push(sub);
     }
@@ -73,8 +74,8 @@ export class OrderService {
   }
 
   getTableOrdersForDate(storeId: string, type: orderType) {
-    const startTime = this.calculatedTime.subtract(SHIFT_PERIOD_HOURS, 'hours').format('YYYY-MM-DD HH:mm');
-    const endTime = this.calculatedTime.add(SHIFT_PERIOD_HOURS, 'hours').format('YYYY-MM-DD HH:mm');
+    const startTime = this.calculatedTime.clone().subtract(SHIFT_PERIOD_HOURS, 'hours').format('YYYY-MM-DD HH:mm');
+    const endTime = this.calculatedTime.clone().add(SHIFT_PERIOD_HOURS, 'hours').format('YYYY-MM-DD HH:mm');
 
     return this.afs.collection<Order>('orders', ref => 
       ref.where('store.id', '==', storeId)
@@ -92,7 +93,7 @@ export class OrderService {
   }
 
   getTakeAwayOrders(storeId: string) {
-    const startTime = this.calculatedTime.subtract(TA_START_PERIOD_HOURS, 'hours').format('YYYY-MM-DD HH:mm');
+    const startTime = this.calculatedTime.clone().subtract(TA_START_PERIOD_HOURS, 'hours').format('YYYY-MM-DD HH:mm');
 
     return this.afs.collection<Order>('orders', ref => 
       ref.where('store.id', '==', storeId)
@@ -101,8 +102,8 @@ export class OrderService {
         .orderBy('orderDate', 'asc')
     ).snapshotChanges().pipe(map(actions => {
       return actions.map(a => {
-        const data = a.payload.doc.data() as Order;
-        const id = a.payload.doc.id;
+        let data = a.payload.doc.data() as Order;
+        let id = a.payload.doc.id;
         return { id, ...data };
       });
     }));
