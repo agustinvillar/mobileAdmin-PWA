@@ -1,6 +1,13 @@
 <ion-header>
   <ion-toolbar>
     <ion-title>Orden #{{ orderData?.order.orderNumber }}</ion-title>
+
+    <ion-buttons slot="start" *ngIf="orderData?.order.orderType === orderTypes.Mesa">
+      <ion-badge color="dark" class="ion-margin-start">
+        Mesa {{ orderData?.order.address }}
+      </ion-badge>
+    </ion-buttons>
+
     <ion-buttons slot="end">
       <ion-button (click)="dismiss()">
         <ion-icon name="close-outline" color="primary"></ion-icon>
@@ -20,10 +27,20 @@
                 {{ orderData?.order.status.toUpperCase() }}
               </ion-chip>
             </ion-col>
-            <ion-col class="ion-no-padding ion-text-end ion-align-self-center">
+            <ion-col class="ion-no-padding ion-text-end ion-align-self-center">              
               <span>{{ orderData?.order.orderDate | datePipe: "HH:mm" }}</span>              
-            </ion-col>
+            </ion-col>            
           </ion-row>
+        </ion-label>
+      </ion-item>
+
+      <ion-item *ngIf="orderData?.order.status === orderStatus.Cancelado">
+        <ion-label>
+          <h2>Motivo</h2>
+          <h3>
+            {{ orderData?.order.cancelSource.toUpperCase() }} :
+            {{ orderData?.order.cancelMotive }}
+          </h3>
         </ion-label>
       </ion-item>
       
@@ -33,15 +50,40 @@
           <h3>{{ orderData?.order.userName }}</h3>
         </ion-label>
       </ion-item>
+      
+      <ion-item *ngIf="orderData?.order.orderType === orderTypes.TakeAway">
+        <ion-label>
+          <h2>Fecha de pedido</h2>
+          <h3>{{ orderData?.order.madeAt | datePipe: "DD/MM/YYYY HH:mm" }}</h3>
+        </ion-label>
+      </ion-item>
 
       <ion-item>
         <ion-label>
           <h2>Items</h2>
-          <h3 *ngFor="let item of orderData?.order.items">
-            - {{ item.name }}
-            <span *ngFor="let option of item.options" class="text-light">({{ option.name }}) </span>
-            <span *ngIf="item.quantity > 1"><b> (x {{ item.quantity }})</b></span>
-          </h3>
+          <div *ngFor="let item of orderData?.order.items">
+            <ion-row>
+              <ion-col>
+                <h3>
+                  - {{ item.name }}
+                  <span *ngFor="let option of item.options" class="text-light">({{ option.name }}) </span>
+                  <b *ngIf="item.quantity > 1" class="text-small">
+                    (x {{ item.quantity }})
+                  </b>
+                </h3>
+              </ion-col>
+
+              <ion-col class="ion-text-end">
+                <h3>${{ item.price * item.quantity }}</h3>
+              </ion-col>
+            </ion-row>
+
+            <ion-row *ngIf="item.guestComment" class="ion-margin-start">
+              <ion-col>
+                <h4 class="text-light">{{ item.guestComment }}</h4>
+              </ion-col>
+            </ion-row> 
+          </div>
         </ion-label>
       </ion-item>
       

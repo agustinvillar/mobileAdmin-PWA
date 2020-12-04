@@ -23,6 +23,8 @@ export class OrderStatusChangePage implements OnInit {
   @Input() orderType: orderType;
   @Input() store: Store;
   orderData: { order: Order, actions: orderStatus[] };
+  orderTypes = orderType;
+  orderStatus = orderStatus;
 
   constructor(
     public modalController: ModalController, private orderService: OrderService, 

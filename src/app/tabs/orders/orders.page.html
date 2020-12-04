@@ -24,13 +24,28 @@
     
       <div [hidden]="collapsed[group]">
         <div *ngFor="let order of segmentOrders; trackBy:order?.id">
-          <ion-item [hidden]="order.status !== group" (click)="showOrder(order)">
+          <ion-item [hidden]="order.status !== group" (click)="showOrder(order)" button>
             <ion-label>
               <ion-row>
-                <ion-col>
-                  # {{ order.orderNumber }}
-                  <span *ngIf="order.userName"> - {{ order.userName }}</span>                          
-                </ion-col>
+                <ion-col *ngIf="order.orderType === orderTypes.Mesa">
+                  <ion-badge color="dark" class="ion-margin-end vertical-align-middle">
+                    Mesa {{ order.address }}
+                  </ion-badge>
+
+                  {{ order.items[0].name }}
+                  <b *ngIf="order.items[0].quantity > 1" class="text-small">
+                    (x {{ order.items[0].quantity }})
+                  </b>
+                </ion-col>      
+
+                <ion-col *ngIf="order.orderType !== orderTypes.Mesa">                  
+                  <ion-badge color="dark" class="ion-margin-end vertical-align-middle">
+                    {{ order.orderNumber }}
+                  </ion-badge>   
+                  
+                  <span *ngIf="order.userName">{{ order.userName }}</span>                          
+                </ion-col>                
+                          
                 <ion-col class="ion-text-end">
                   <span>{{ order.orderDate | datePipe: "HH:mm" }}</span>              
                 </ion-col>
