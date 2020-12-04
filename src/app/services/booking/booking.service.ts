@@ -27,7 +27,9 @@ export class BookingService {
 
   async getBookingById(bookingId: string) {
     const doc = await this.afs.collection<Bookings>('bookings').doc(bookingId).ref.get();
-    return <Bookings>doc.data();
+    let booking = doc.data() as Bookings;
+    booking.id = doc.id;
+    return booking;
   }
 
   async refundBooking(order: Order) {
