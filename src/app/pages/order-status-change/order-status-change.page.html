@@ -14,9 +14,16 @@
     <ion-list>
       <ion-item>
         <ion-label>
-          <ion-chip color="{{ orderData?.order.status }}">
-            {{ orderData?.order.status.toUpperCase() }}
-          </ion-chip>
+          <ion-row>
+            <ion-col class="ion-no-padding">
+              <ion-chip color="{{ orderData?.order.status }}">
+                {{ orderData?.order.status.toUpperCase() }}
+              </ion-chip>
+            </ion-col>
+            <ion-col class="ion-no-padding ion-text-end ion-align-self-center">
+              <span>{{ orderData?.order.orderDate | datePipe: "HH:mm" }}</span>              
+            </ion-col>
+          </ion-row>
         </ion-label>
       </ion-item>
       

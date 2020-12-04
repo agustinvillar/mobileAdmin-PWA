@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { IonicModule } from '@ionic/angular';
 
 import { OrderStatusChangePageRoutingModule } from './order-status-change-routing.module';
+import { PipesModule } from 'src/app/pipes/pipes.module';
 
 import { OrderStatusChangePage } from './order-status-change.page';
 
@@ -13,7 +14,8 @@ import { OrderStatusChangePage } from './order-status-change.page';
     CommonModule,
     FormsModule,
     IonicModule,
-    OrderStatusChangePageRoutingModule
+    OrderStatusChangePageRoutingModule,
+    PipesModule
   ],
   declarations: [OrderStatusChangePage]
 })

@@ -15,15 +15,15 @@
 
   <ion-list mode="md">
     
-    <ion-item-group *ngFor="let group of currentSegmentStatus">
+    <ion-item-group *ngFor="let group of currentSegmentStatus; trackBy:group">
       <ion-item-divider color="{{ group }}" (click)="toggleList(group)">
         <ion-label>{{ group }}</ion-label>
         <ion-icon *ngIf="collapsed[group]" name="chevron-down-outline" slot="end"></ion-icon>
         <ion-icon *ngIf="!collapsed[group]" name="chevron-up-outline" slot="end"></ion-icon>
       </ion-item-divider>
     
-      <div *ngIf="!collapsed[group]">
-        <div *ngFor="let order of segmentOrders">
+      <div [hidden]="collapsed[group]">
+        <div *ngFor="let order of segmentOrders; trackBy:order?.id">
           <ion-item *ngIf="order.status === group" (click)="showOrder(order)">
             <ion-label>
               <ion-row>
@@ -32,7 +32,7 @@
                   <span *ngIf="order.userName"> - {{ order.userName }}</span>                          
                 </ion-col>
                 <ion-col class="ion-text-end">
-                  <span>{{ order.orderDate | date: "HH:mm" }}</span>              
+                  <span>{{ order.orderDate | datePipe: "HH:mm" }}</span>              
                 </ion-col>
               </ion-row>
             </ion-label>
