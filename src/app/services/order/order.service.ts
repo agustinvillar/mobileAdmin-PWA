@@ -70,7 +70,9 @@ export class OrderService {
 
   async get(orderId: string): Promise<Order> {
     const doc = await this.afs.collection<Order>('orders').doc(orderId).ref.get();
-    return <Order>doc.data();
+    let order = doc.data() as Order;
+    order.id = doc.id;
+    return order;
   }
 
   getTableOrdersForDate(storeId: string, type: orderType) {
