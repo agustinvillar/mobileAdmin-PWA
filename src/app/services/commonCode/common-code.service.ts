@@ -51,7 +51,7 @@ export class CommonCodeService {
     if (daySchedule.open) {
       if (daySchedule.open24Hours) {
         const time = await this.generalService.getCalculatedTime();
-        return { open: this.zeroMoment, closes: this.midnightMoment, secondOpen: null, secondCloses: null, currentOpen: time.subtract(12, 'hours'), currentCloses: time.add(12, 'hours') }
+        return { open: this.zeroMoment, closes: this.midnightMoment, secondOpen: null, secondCloses: null, currentOpen: time.clone().subtract(12, 'hours'), currentCloses: time.clone().add(12, 'hours') }
       }
       open = this.buildDateFromMoment(now, daySchedule.firstOpen);
       closes = this.buildDateFromMoment(now, daySchedule.firstCloses);

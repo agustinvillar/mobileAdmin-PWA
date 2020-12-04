@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AngularFirestore } from '@angular/fire/firestore';
 import { BehaviorSubject, Subscription } from 'rxjs';
-import { mergeMap } from 'rxjs/internal/operators/mergeMap';
 import { map } from 'rxjs/internal/operators/map';
 
 import { cancelSource, orderStatus, orderType } from 'src/app/models/enums';
