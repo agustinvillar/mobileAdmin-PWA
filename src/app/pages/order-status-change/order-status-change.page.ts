@@ -25,6 +25,7 @@ export class OrderStatusChangePage implements OnInit {
   orderData: { order: Order, actions: orderStatus[] };
   orderTypes = orderType;
   orderStatus = orderStatus;
+  total: number = 0;
 
   constructor(
     public modalController: ModalController, private orderService: OrderService, 
@@ -48,6 +49,10 @@ export class OrderStatusChangePage implements OnInit {
 
   async getOrderData() {
     this.orderData = await this.orderService.getActions(this.orderId, this.store);
+    this.total = this.orderData.order.total;
+    if (this.orderData.order.extras) { 
+      this.orderData.order.extras.forEach(extra => { this.total += Number(extra.price); }); 
+    }
   }
 
   async updateStatus(status: orderStatus, action: orderStatus) {

@@ -63,18 +63,20 @@
           <h2>Items</h2>
           <div *ngFor="let item of orderData?.order.items">
             <ion-row>
-              <ion-col>
+              <ion-col size="9">
                 <h3>
                   - {{ item.name }}
-                  <span *ngFor="let option of item.options" class="text-light">({{ option.name }}) </span>
-                  <b *ngIf="item.quantity > 1" class="text-small">
-                    (x {{ item.quantity }})
-                  </b>
+                  <span *ngFor="let option of item.options" class="text-light">({{ option.name }}) </span>                  
                 </h3>
               </ion-col>
 
-              <ion-col class="ion-text-end">
-                <h3>${{ item.price * item.quantity }}</h3>
+              <ion-col class="ion-text-end" size="3">
+                <h3>
+                  <b *ngIf="item.quantity > 1" class="text-smaller quantity">
+                    (x {{ item.quantity }})
+                  </b>
+                  ${{ item.subTotal }}
+                </h3>
               </ion-col>
             </ion-row>
 
@@ -97,7 +99,7 @@
       <ion-item>
         <ion-label>
           <h2>TOTAL</h2>
-          <h3>${{ orderData?.order.total }}</h3>
+          <h3>${{ total }}</h3>
         </ion-label>
       </ion-item>
     </ion-list>
