@@ -40,6 +40,12 @@ export class StoreService {
 
   async setStoreById(storeId: string) {
     const store = await this.get(storeId).pipe(take(1)).toPromise();
-    if (store) this.setCurrentStore(store);
+    if (store) {
+      console.log(store)
+      if(!store.id){
+        store.id = storeId;
+      }
+      this.setCurrentStore(store);
+    }
   }
 }
